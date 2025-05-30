@@ -10,19 +10,6 @@ const Recibos = ({ recibos, userLegajo }) => {
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   const [datosReciboActual, setDatosReciboActual] = useState(null);
 
-  // const handleSeleccion = (recibo) => {
-  //   setReciboSeleccionado(recibo);
-  //   const [mes, anio] = recibo.Mes.split('/');
-  //   const anioCorto = anio.slice(-2);
-  //   const fileBase = `leg${userLegajo}-${mes}-${anioCorto}`;
-    
-  //   setDatosReciboActual({
-  //     fileName: `${fileBase}.png`,
-  //     pdfPath: `/assets/Cprueba/${fileBase}.pdf`,
-  //   });
-  //   setMostrarFirma(true);
-  // };
-
   const handleSeleccion = async (recibo) => {
     const [mes, anio] = recibo.Mes.split('/');
     const fileBase = `Leg${userLegajo}-${mes}-${anio}`;

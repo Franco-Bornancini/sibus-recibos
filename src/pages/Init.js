@@ -108,7 +108,7 @@ const Init = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
+        const response = await fetch(`https://wsempleados.sibus.com.ar/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`

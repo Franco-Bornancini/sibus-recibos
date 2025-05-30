@@ -94,7 +94,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const tokenResponse = await fetch('/api/token', {
+      const tokenResponse = await fetch('https://wsempleados.sibus.com.ar/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuario: 'S18u5', clave: 'S-Bu5*wS/25' })

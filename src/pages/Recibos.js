@@ -49,7 +49,7 @@ const Recibos = ({ recibos, userLegajo }) => {
     };
 
     try {
-      const response = await fetch('/api/Firma/firma', {
+      const response = await fetch('https://wsempleados.sibus.com.ar/api/Firma/firma', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -88,6 +88,8 @@ const Init = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
@@ -104,11 +106,13 @@ const Init = () => {
     }
 
     const fetchRecibos = async () => {
+      const API_BASE = import.meta.env.VITE_API_URL;
       try {
         setLoading(true);
         setError(null);
+        
 
-        const response = await fetch(`https://wsempleados.sibus.com.ar/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
+        const response = await fetch(`${API_BASE}/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`

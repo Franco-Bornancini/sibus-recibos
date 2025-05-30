@@ -88,13 +88,17 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
+    const API_BASE = import.meta.env.VITE_API_URL;
+
     try {
-      const tokenResponse = await fetch('https://wsempleados.sibus.com.ar/api/token', {
+      const tokenResponse = await fetch(`${API_BASE}/api/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuario: 'S18u5', clave: 'S-Bu5*wS/25' })

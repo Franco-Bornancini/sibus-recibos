@@ -47,9 +47,11 @@ const Recibos = ({ recibos, userLegajo }) => {
       NrRecibo: reciboSeleccionado.NrRecibo,
       Base64Image: base64,
     };
-
+    
+    const API_BASE = import.meta.env.VITE_API_URL;
     try {
-      const response = await fetch('https://wsempleados.sibus.com.ar/api/Firma/firma', {
+      
+      const response = await fetch(`${API_BASE}/api/Firma/firma`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

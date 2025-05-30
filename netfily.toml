@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build-safe"
+  command: CI=false && npm install --legacy-peer-deps && npm run build
   publish = "build"
 
 [build.environment]
@@ -7,11 +7,3 @@
   CI = "false"
   DISABLE_ESLINT_PLUGIN = "true"
   GENERATE_SOURCEMAP = "false"
-
-[build]
-  command = "npm ci && npm run build"
-  publish = "build"
-
-[build.environment]
-  NODE_VERSION = "18"
-  CI = "false"

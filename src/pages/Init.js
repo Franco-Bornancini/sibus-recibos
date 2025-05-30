@@ -62,7 +62,7 @@ const Init = () => {
             <EmployeeCard userData={userData} />
           </>
         ) : (
-          <p>No se encontraron datos del usuario.</p>
+          <p>{error}</p>
         )}
 
         <hr />

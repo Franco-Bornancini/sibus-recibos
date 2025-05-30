@@ -86,18 +86,18 @@ import Logo from '../assets/logosibus.png';
 const Login = () => {
   const [legajo, setLegajo] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // Cambiado a null para mejor práctica
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Resetear error al iniciar
+    setError(null);
 
     try {
       const tokenResponse = await fetch('/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuario: 'string', clave: 'string' })
+        body: JSON.stringify({ usuario: 'S18u5', clave: 'S-Bu5*wS/25' })
       });
 
       if (!tokenResponse.ok) {
@@ -124,7 +124,7 @@ const Login = () => {
         throw new Error('Credenciales inválidas');
       }
     } catch (err) {
-      setError(err.message); // Usamos setError aquí
+      setError(err.message);
     }
   };
 

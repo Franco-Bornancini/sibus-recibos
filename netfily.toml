@@ -1,6 +1,7 @@
 [build]
   command = "npm run build"
   publish = "build"
+  rollup = { external = ["ajv"] }
 
 [build.environment]
   CI = "false"

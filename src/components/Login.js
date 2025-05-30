@@ -1,22 +1,28 @@
-import '../styles/Login.css'
+import '../styles/Login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/logosibus.png'
+import Logo from '../assets/logosibus.png';
 
 const Login = () => {
   const [legajo, setLegajo] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
+    setError(null);
 
+    try {
       const tokenResponse = await fetch('/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuario: 'string', clave: 'string' })
       });
+
+      if (!tokenResponse.ok) {
+        throw new Error('Error al obtener token');
+      }
 
       const { token } = await tokenResponse.json();
 
@@ -35,43 +41,49 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(userData));
         navigate('/home');
       } else {
+        throw new Error('Credenciales inválidas');
       }
-    };
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className='back'>
-        <div className='cuadro'>
-            <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }} className='div_f'>
-            <div>
-                <img src={Logo} alt="Icono Logo" className='logo_css'/>
-            </div>
-            <div className='encuadro'>
-              <h2>Iniciar Sesión</h2>
-              {error && <p style={{ color: 'red' }}>{error}</p>}
-              <form onSubmit={handleSubmit} className='form_inputs'>
-                  <div>
-                  <label>Usuario:</label><br />
-                  <input
-                    type="text"
-                    value={legajo}
-                    onChange={(e) => setLegajo(e.target.value)}
-                    required
-                  />
-                  </div>
-                  <div style={{  }} className='PassW'>
-                  <label>Contraseña:</label><br />
-                  <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                  />
-                  </div>
-                  <button type="submit" style={{ marginTop: '1rem' }} className='btn_init'>Ingresar</button>
-              </form>
-            </div>
-            </div>
+      <div className='cuadro'>
+        <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }} className='div_f'>
+          <div>
+            <img src={Logo} alt="Logo Sibus" className='logo_css'/>
+          </div>
+          <div className='encuadro'>
+            <h2>Iniciar Sesión</h2>
+            {error && <p className="error-message">{error}</p>}
+            <form onSubmit={handleSubmit} className='form_inputs'>
+              <div>
+                <label htmlFor="usuario">Usuario:</label><br />
+                <input
+                  id="usuario"
+                  type="text"
+                  value={legajo}
+                  onChange={(e) => setLegajo(e.target.value)}
+                  required
+                />
+              </div>
+              <div className='PassW'>
+                <label htmlFor="password">Contraseña:</label><br />
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit" className='btn_init'>Ingresar</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
   );
 };

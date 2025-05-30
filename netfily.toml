@@ -1,8 +1,9 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build-safe"
   publish = "build"
-  rollup = { external = ["ajv"] }
 
 [build.environment]
-  CI = "false"
   NODE_VERSION = "18"
+  CI = "false"
+  DISABLE_ESLINT_PLUGIN = "true"
+  GENERATE_SOURCEMAP = "false"

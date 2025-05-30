@@ -10,7 +10,9 @@
     "@testing-library/user-event": "^14.4.3",
     "ajv": "^8.17.1",
     "bootstrap": "^5.3.6",
+    "csso": "^5.0.5",
     "mdb-react-ui-kit": "^9.0.0",
+    "mdn-data": "^2.21.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^18.2.0",
@@ -23,8 +25,10 @@
     "build": "set CI=false && react-scripts build",
     "start": "set CI=false && react-scripts start",
     "build-windows": "set CI=false && react-scripts build",
+    "build-safe": "set DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "node postinstall.js"
   },
   "eslintConfig": {
     "extends": [

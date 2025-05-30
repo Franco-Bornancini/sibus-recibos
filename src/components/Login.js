@@ -43,7 +43,7 @@ const Login = () => {
         <div className='cuadro'>
             <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }} className='div_f'>
             <div>
-                <img src={Logo} className='logo_css'/>
+                <img src={Logo} alt="Icono Logo" className='logo_css'/>
             </div>
             <div className='encuadro'>
               <h2>Iniciar Sesión</h2>

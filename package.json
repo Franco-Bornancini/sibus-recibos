@@ -1,8 +1,9 @@
+
 {
   "name": "sibus-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://172.16.10.42",
+  "proxy": "http://wsempleados.sibus.com.ar",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.6.3",

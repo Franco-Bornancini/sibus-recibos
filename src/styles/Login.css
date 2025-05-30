@@ -17,19 +17,6 @@ html, body {
   
 }
 
-/*.back {
-  background-image: url('../assets/sibuscole.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  
-  height: 100vh;
-  width: 100%;
-  display: flex; 
-  justify-content: center;
-  align-items: center;
-} */
 .cuadro{
     margin-top: 10rem;
 }
@@ -52,7 +39,7 @@ html, body {
   width: 100%;
   height: 100%;
   /* background-image: url('../assets/sibuscole.jpg'); */
-  background-color: rgb(33, 37, 41);
+  background-color: rgb(128, 128, 128);
   background-size: cover;
   background-position: center;
   filter: blur(2px);
@@ -82,11 +69,11 @@ html, body {
     text-align: center;
     font-family: "Montserrat", sans-serif;
     font-weight: bold;
-    color: rgb(255,255,255);
+    color: rgb(255, 255, 255);
 }
 
 .form_inputs input{
-    border-radius: 2px;
+    border-radius: 5px;
     border: 1px solid;
     font-family: "Montserrat", sans-serif;
     text-align: center;

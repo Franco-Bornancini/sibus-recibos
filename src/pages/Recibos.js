@@ -48,10 +48,10 @@ const Recibos = ({ recibos, userLegajo }) => {
       Base64Image: base64,
     };
     
-    const API_BASE = import.meta.env.VITE_API_URL;
+    const API_URL = process.env.REACT_APP_API_URL;
     try {
       
-      const response = await fetch(`${API_BASE}/api/Firma/firma`, {
+      const response = await fetch(`${API_URL}/api/Firma/firma`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

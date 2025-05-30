@@ -1,0 +1,14 @@
+.cuerpo_h{
+    text-align: center;
+}
+
+.title_init{
+    display: flex;
+    justify-content: center;
+}
+.welc{
+    padding-right: 8px;
+}
+.color_si{
+    color: rgb(255, 0, 179);
+}

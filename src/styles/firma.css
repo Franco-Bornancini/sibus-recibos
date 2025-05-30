@@ -1,0 +1,28 @@
+.firma-container {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.firma-lienzo {
+  border: 1px solid black;
+  width: 100%;
+  height: 150px;
+}
+
+.recibos-container {
+  padding: 20px;
+}
+
+.recibo-item {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 500px;
+}

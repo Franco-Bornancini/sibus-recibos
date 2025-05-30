@@ -1,0 +1,103 @@
+.back{
+    
+    background-size: cover;          
+    background-repeat: no-repeat;   
+    background-position: center;     
+    background-attachment: fixed; 
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  
+}
+
+/*.back {
+  background-image: url('../assets/sibuscole.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  
+  height: 100vh;
+  width: 100%;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+} */
+.cuadro{
+    margin-top: 10rem;
+}
+.div_f {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(255, 0, 200, 0.2), 0 6px 20px rgba(255, 0, 200, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.div_f::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-image: url('../assets/sibuscole.jpg'); */
+  background-color: rgb(33, 37, 41);
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+.div_f > * {
+  position: relative;
+  z-index: 1;
+}
+.logo_css {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 4px;
+    margin: 10px;
+}
+.div_f h2{
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+}
+.encuadro{
+    /* background-color: rgb(255,255,255);  */
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+    color: rgb(255,255,255);
+}
+
+.form_inputs input{
+    border-radius: 2px;
+    border: 1px solid;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+}
+.btn_init{
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: none;
+    color: rgb(255,255,255);
+    background-color: rgba(0, 0, 0, 0.877);
+    width: 150px;
+    height: 25px;
+}

@@ -106,13 +106,13 @@ const Init = () => {
     }
 
     const fetchRecibos = async () => {
-      const API_URL = process.env.REACT_APP_API_URL;
+
       try {
         setLoading(true);
         setError(null);
         
 
-        const response = await fetch(`${API_URL}/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
+        const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`

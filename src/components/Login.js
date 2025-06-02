@@ -95,10 +95,9 @@ const Login = () => {
     e.preventDefault();
     setError(null);
 
-    const API_URL = process.env.REACT_APP_API_URL;
 
     try {
-      const tokenResponse = await fetch(`${API_URL}/api/token`, {
+      const tokenResponse = await fetch(`/api/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuario: 'S18u5', clave: 'S-Bu5*wS/25' })

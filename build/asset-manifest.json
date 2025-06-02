@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.dacd9bdd.css",
+    "main.js": "/static/js/main.6ef19dd3.js",
+    "static/js/488.9a1bf562.chunk.js": "/static/js/488.9a1bf562.chunk.js",
+    "static/media/logosibus.png": "/static/media/logosibus.badc5ccfa1bef064d04d.png",
+    "index.html": "/index.html",
+    "main.dacd9bdd.css.map": "/static/css/main.dacd9bdd.css.map",
+    "main.6ef19dd3.js.map": "/static/js/main.6ef19dd3.js.map",
+    "488.9a1bf562.chunk.js.map": "/static/js/488.9a1bf562.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dacd9bdd.css",
+    "static/js/main.6ef19dd3.js"
+  ]
+}

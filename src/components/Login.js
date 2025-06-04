@@ -9,7 +9,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  
+  const userS = 'S18u5'
+  const userkey = 'S-Bu5*wS/25'
 
 
   const handleSubmit = async (e) => {
@@ -21,7 +22,7 @@ const Login = () => {
       const tokenResponse = await fetch(`/api/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuario: 'S18u5', clave: 'S-Bu5*wS/25' })
+        body: JSON.stringify({ usuario: userS , clave: userkey })
       });
 
       if (!tokenResponse.ok) {

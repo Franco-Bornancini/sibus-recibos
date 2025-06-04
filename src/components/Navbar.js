@@ -29,9 +29,6 @@
 
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import { FaUserCircle } from 'react-icons/fa';
-import Logo from '../assets/logosibus.png';
-import Logo2 from '../assets/LogoChico.png'
 import Logo3 from '../assets/SIBUS.png'
 import '../styles/Navbar.css';
 

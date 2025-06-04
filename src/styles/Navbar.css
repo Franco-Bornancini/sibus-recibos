@@ -1,0 +1,40 @@
+/* Navbar.css */
+.center{
+  justify-content: center !Important;
+}
+.sibus-navbar {
+  /* background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); */
+  background-color: rgb(214, 214, 214);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  /* height: 40px; */
+  max-width: 100px;
+  max-height: 100px;
+  /* border-radius: 100px; */
+  margin-right: 12px;
+}
+
+.navbar-brand-text {
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  color: rgb(255, 255, 255);
+}
+
+.user-icon {
+  font-size: 1.8rem;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-weight: 500;
+}

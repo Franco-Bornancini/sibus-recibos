@@ -1,0 +1,57 @@
+/* EmployeeCard.css */
+.employee-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  max-width: 400px;
+  margin: 1rem auto;
+}
+
+.employee-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+}
+
+.title-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.employee-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detail-icon {
+  color: #000000;
+  font-size: 1.1rem;
+  min-width: 24px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #555;
+  margin-right: 8px;
+}
+
+.detail-value {
+  color: #333;
+}

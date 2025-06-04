@@ -3,6 +3,7 @@ import '../styles/Login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/logosibus.png';
+import Logo3 from '../assets/SIBUS.png'
 
 const Login = () => {
   const [legajo, setLegajo] = useState('');
@@ -57,7 +58,7 @@ const Login = () => {
       <div className='cuadro'>
         <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }} className='div_f'>
           <div>
-            <img src={Logo} alt="Logo Sibus" className='logo_css'/>
+            <img src={Logo3} alt="Logo Sibus" className='logo_css'/>
           </div>
           <div className='encuadro'>
             <h2>Iniciar Sesión</h2>

@@ -1,11 +1,102 @@
 
 
+// import React, { useEffect, useState } from 'react';
+// import Navbar from '../components/Navbar';
+// import Recibos from './Recibos';
+// import '../styles/home.css';
+// import EmployeeCard from '../components/Card';
+// import { BeatLoader } from 'react-spinners';
+
+// const Init = () => {
+//   const [userData, setUserData] = useState(null);
+//   const [token, setToken] = useState(null);
+//   const [recibos, setRecibos] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+
+
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem('user');
+//     const storedToken = localStorage.getItem('token');
+    
+//     if (storedUser) setUserData(JSON.parse(storedUser));
+//     if (storedToken) setToken(storedToken);
+//   }, []);
+
+//   useEffect(() => {
+//     if (!userData || !token) {
+//       setError('No se encontraron datos del usuario o token.');
+//       setLoading(false);
+//       return;
+//     }
+
+//     const fetchRecibos = async () => {
+
+//       try {
+//         setLoading(true);
+//         setError(null);
+        
+
+//         const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
+//           method: 'GET',
+//           headers: {
+//             'Authorization': `Bearer ${token}`
+//           },
+//         });
+
+//         if (!response.ok) {
+//           throw new Error(`Error al obtener recibos: ${response.statusText}`);
+//         }
+
+//         const data = await response.json();
+//         setRecibos(data);
+//       } catch (err) {
+//         setError(err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchRecibos();
+//   }, [userData, token]);
+
+//   if (loading) return <BeatLoader />;
+
+//   return (
+//     <div>
+//       <Navbar />
+//       <div className='cuerpo_h'>
+//         <div className='title_init'>
+//           <h2 className='welc'>Bienvenido a </h2>
+//           <h2 className='color_si'> Si</h2>
+//           <h2>Bus</h2>
+//         </div>
+        
+//         {error ? (
+//           <p className="error-message">{error}</p>
+//         ) : (
+//           <>
+//             {userData && <EmployeeCard userData={userData} />}
+//             <hr />
+//             <Recibos recibos={recibos} userLegajo={userData?.Legajo} />
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Init;
+
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
-import Recibos from './Recibos';
-import '../styles/home.css';
-import EmployeeCard from '../components/Card';
+import { FaBus } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
+import CustomNavbar from '../components/Navbar';
+import Recibos from './Recibos';
+import EmployeeCard from '../components/Card';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
+import '../styles/home.css';
 
 const Init = () => {
   const [userData, setUserData] = useState(null);
@@ -13,8 +104,6 @@ const Init = () => {
   const [recibos, setRecibos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -32,12 +121,10 @@ const Init = () => {
     }
 
     const fetchRecibos = async () => {
-
       try {
         setLoading(true);
         setError(null);
         
-
         const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
           method: 'GET',
           headers: {
@@ -61,28 +148,64 @@ const Init = () => {
     fetchRecibos();
   }, [userData, token]);
 
-  if (loading) return <BeatLoader />;
+  // if (loading) {
+  //   return (
+  //     <div className="loading-container">
+  //       <BeatLoader color="#6e48aa" size={15} />
+  //     </div>
+  //   );
+  // }
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="bus-loading">
+          <FaBus className="pink-bus-icon" />
+          <BeatLoader color="#ff5fb0" size={15} />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <Navbar />
-      <div className='cuerpo_h'>
-        <div className='title_init'>
-          <h2 className='welc'>Bienvenido a </h2>
-          <h2 className='color_si'> Si</h2>
-          <h2>Bus</h2>
-        </div>
-        
-        {error ? (
-          <p className="error-message">{error}</p>
-        ) : (
-          <>
-            {userData && <EmployeeCard userData={userData} />}
-            <hr />
-            <Recibos recibos={recibos} userLegajo={userData?.Legajo} />
-          </>
+    <div className="init-container">
+      <CustomNavbar userData={userData} />
+      
+      <Container className="main-content py-4">
+        <Row className="justify-content-center mb-4">
+          <Col xs={12} className="text-center">
+            <div className='title_init'>
+                <h2 className='welc'>Bienvenido a </h2>
+                <h2 className='color_si'> Si</h2>
+                <h2>Bus</h2>
+            </div>
+          </Col>
+        </Row>
+
+        {error && (
+          <Row className="mb-4">
+            <Col xs={12}>
+              <Alert variant="danger" className="text-center">
+                {error}
+              </Alert>
+            </Col>
+          </Row>
         )}
-      </div>
+
+
+        {!error && (
+          <Row className="justify-content-center">
+
+            <Col lg={4} className="mb-4">
+              {userData && <EmployeeCard userData={userData} />}
+            </Col>
+
+            <Col lg={8}>
+              <Recibos recibos={recibos} userLegajo={userData?.Legajo} />
+            </Col>
+          </Row>
+        )}
+      </Container>
     </div>
   );
 };

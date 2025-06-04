@@ -1,6 +1,8 @@
 
+// recibos estetica 2
 import React, { useState } from 'react';
-import { Table, Button, Modal, Form } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Card, Row, Col, InputGroup } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import FirmaPad from '../components/FirmasPad';
 import DescargaRecibo from '../components/Descrecibos';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,24 +22,17 @@ const Recibos = ({ recibos, userLegajo }) => {
 
     try {
       const res = await fetch(pdfPath, { method: 'HEAD' });
-
-      if (!res.ok) {
-        alert("El archivo PDF del recibo no está disponible.");
-        return;
-      }
-
+      if (!res.ok) return alert("El archivo PDF del recibo no está disponible.");
       setReciboSeleccionado(recibo);
       setDatosReciboActual({ fileName, pdfPath });
       setMostrarFirma(true);
     } catch (error) {
-      console.error("Error al verificar PDF:", error);
       alert("No se pudo verificar la existencia del archivo PDF.");
     }
   };
 
   const handleFirmaConfirmada = async (firmaDataUrl) => {
     if (!datosReciboActual || !reciboSeleccionado) return;
-
     const base64 = firmaDataUrl.split(',')[1];
     const token = localStorage.getItem('token');
 
@@ -58,14 +53,10 @@ const Recibos = ({ recibos, userLegajo }) => {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error('Error al subir la firma');
-      }
-
+      if (!response.ok) throw new Error('Error al subir la firma');
       window.open(datosReciboActual.pdfPath, '_blank');
       setMostrarFirma(false);
     } catch (error) {
-      console.error('Error al enviar firma:', error);
       alert("No se pudo enviar la firma.");
     }
   };
@@ -75,54 +66,64 @@ const Recibos = ({ recibos, userLegajo }) => {
   );
 
   return (
-    <div className="container mt-4">
-      <h3>Recibos de Sueldo</h3>
+    <div className="container py-4">
+      <Card className="shadow-lg rounded-4 p-4">
+        <h3 className="mb-4 text-center text-dark-emphasis">📄 Recibos de Sueldo</h3>
 
-      <Form.Group className="mb-3" controlId="filtroMes">
-        <Form.Control
-          type="text"
-          placeholder="Buscar por mes (ej: 04/2025)"
-          value={filtroMes}
-          onChange={(e) => setFiltroMes(e.target.value)}
-        />
-      </Form.Group>
+        <Row className="mb-4">
+          <Col md={6} className="mx-auto">
+            <InputGroup>
+              <InputGroup.Text><FaSearch /></InputGroup.Text>
+              <Form.Control
+                type="text"
+                placeholder="Buscar por mes (ej: 04/2025)"
+                value={filtroMes}
+                onChange={(e) => setFiltroMes(e.target.value)}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
 
-      <Table striped="rows">
-        <thead className='table_enc'>
-          <tr>
-            <th>#</th>
-            <th>Nº Liquidación</th>
-            <th>Fecha</th>
-            <th>Descargar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recibosFiltrados.map((recibo, index) => (
-            <tr key={`${recibo.NrLiq}-${recibo.NrRecibo}`} className={index % 2 === 0 ? 'fila-celeste' : 'fila-blanca'}>
-              <td>{index + 1}</td>
-              <td>{recibo.NrLiq}</td>
-              <td>{recibo.Mes}</td>
-              <td>
-                {recibo.Firmado === 1 ? (
-                  <DescargaRecibo recibo={recibo} userLegajo={userLegajo} />
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={() => handleSeleccion(recibo)}
-                  >
-                    Firmar y Ver
-                  </Button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        <div className="table-responsive">
+          <Table hover bordered className="tabla-estilizada">
+            <thead className="table-encabezado text-white">
+              <tr>
+                <th>#</th>
+                <th>Nº Liquidación</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recibosFiltrados.map((recibo, index) => (
+                <tr key={`${recibo.NrLiq}-${recibo.NrRecibo}`} className={index % 2 === 0 ? 'fila-celeste' : 'fila-blanca'}>
+                  <td>{index + 1}</td>
+                  <td>{recibo.NrLiq}</td>
+                  <td>{recibo.Mes}</td>
+                  <td>
+                    {recibo.Firmado === 1 ? (
+                      <DescargaRecibo recibo={recibo} userLegajo={userLegajo} />
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline-pink"
+                        className="btn-firma"
+                        onClick={() => handleSeleccion(recibo)}
+                      >
+                        Firmar y Ver
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </Card>
 
       <Modal show={mostrarFirma} onHide={() => setMostrarFirma(false)} size="lg" centered>
         <Modal.Header closeButton>
-          <Modal.Title>Firma del recibo</Modal.Title>
+          <Modal.Title>Firma del Recibo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {datosReciboActual && (

@@ -1,5 +1,4 @@
 
-// recibos estetica 2
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Card, Row, Col, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
@@ -8,7 +7,7 @@ import DescargaRecibo from '../components/Descrecibos';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/recibos.css';
 
-const Recibos = ({ recibos, userLegajo }) => {
+const Recibos = ({ recibos, userLegajo, refetchRecibos }) => {
   const [mostrarFirma, setMostrarFirma] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   const [datosReciboActual, setDatosReciboActual] = useState(null);
@@ -21,7 +20,7 @@ const Recibos = ({ recibos, userLegajo }) => {
     const fileName = `${fileBase}.png`;
 
     try {
-      const res = await fetch(pdfPath, { method: 'HEAD' });
+      const res = await fetch(pdfPath, { method: 'GET' });
       if (!res.ok) return alert("El archivo PDF del recibo no está disponible.");
       setReciboSeleccionado(recibo);
       setDatosReciboActual({ fileName, pdfPath });
@@ -54,8 +53,14 @@ const Recibos = ({ recibos, userLegajo }) => {
       });
 
       if (!response.ok) throw new Error('Error al subir la firma');
-      window.open(datosReciboActual.pdfPath, '_blank');
+
       setMostrarFirma(false);
+      setReciboSeleccionado(null);
+      setDatosReciboActual(null);
+
+      await refetchRecibos();
+
+      window.open(payload.pdfPath || datosReciboActual.pdfPath, '_blank'); // abrir PDF
     } catch (error) {
       alert("No se pudo enviar la firma.");
     }

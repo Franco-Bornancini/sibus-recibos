@@ -1,94 +1,4 @@
 
-
-// import React, { useEffect, useState } from 'react';
-// import Navbar from '../components/Navbar';
-// import Recibos from './Recibos';
-// import '../styles/home.css';
-// import EmployeeCard from '../components/Card';
-// import { BeatLoader } from 'react-spinners';
-
-// const Init = () => {
-//   const [userData, setUserData] = useState(null);
-//   const [token, setToken] = useState(null);
-//   const [recibos, setRecibos] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-
-
-//   useEffect(() => {
-//     const storedUser = localStorage.getItem('user');
-//     const storedToken = localStorage.getItem('token');
-    
-//     if (storedUser) setUserData(JSON.parse(storedUser));
-//     if (storedToken) setToken(storedToken);
-//   }, []);
-
-//   useEffect(() => {
-//     if (!userData || !token) {
-//       setError('No se encontraron datos del usuario o token.');
-//       setLoading(false);
-//       return;
-//     }
-
-//     const fetchRecibos = async () => {
-
-//       try {
-//         setLoading(true);
-//         setError(null);
-        
-
-//         const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
-//           method: 'GET',
-//           headers: {
-//             'Authorization': `Bearer ${token}`
-//           },
-//         });
-
-//         if (!response.ok) {
-//           throw new Error(`Error al obtener recibos: ${response.statusText}`);
-//         }
-
-//         const data = await response.json();
-//         setRecibos(data);
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchRecibos();
-//   }, [userData, token]);
-
-//   if (loading) return <BeatLoader />;
-
-//   return (
-//     <div>
-//       <Navbar />
-//       <div className='cuerpo_h'>
-//         <div className='title_init'>
-//           <h2 className='welc'>Bienvenido a </h2>
-//           <h2 className='color_si'> Si</h2>
-//           <h2>Bus</h2>
-//         </div>
-        
-//         {error ? (
-//           <p className="error-message">{error}</p>
-//         ) : (
-//           <>
-//             {userData && <EmployeeCard userData={userData} />}
-//             <hr />
-//             <Recibos recibos={recibos} userLegajo={userData?.Legajo} />
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Init;
-
 import React, { useEffect, useState } from 'react';
 import { FaBus } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
@@ -113,48 +23,42 @@ const Init = () => {
     if (storedToken) setToken(storedToken);
   }, []);
 
-  useEffect(() => {
+  const fetchRecibos = async () => {
     if (!userData || !token) {
       setError('No se encontraron datos del usuario o token.');
       setLoading(false);
       return;
     }
 
-    const fetchRecibos = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        });
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`Error al obtener recibos: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        setRecibos(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`Error al obtener recibos: ${response.statusText}`);
       }
-    };
 
-    fetchRecibos();
+      const data = await response.json();
+      setRecibos(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userData && token) {
+      fetchRecibos();
+    }
   }, [userData, token]);
-
-  // if (loading) {
-  //   return (
-  //     <div className="loading-container">
-  //       <BeatLoader color="#6e48aa" size={15} />
-  //     </div>
-  //   );
-  // }
 
   if (loading) {
     return (
@@ -192,16 +96,18 @@ const Init = () => {
           </Row>
         )}
 
-
         {!error && (
           <Row className="justify-content-center">
-
             <Col lg={4} className="mb-4">
               {userData && <EmployeeCard userData={userData} />}
             </Col>
 
             <Col lg={8}>
-              <Recibos recibos={recibos} userLegajo={userData?.Legajo} />
+              <Recibos
+                recibos={recibos}
+                userLegajo={userData?.Legajo}
+                refetchRecibos={fetchRecibos}
+              />
             </Col>
           </Row>
         )}

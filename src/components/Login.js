@@ -2,7 +2,6 @@
 import '../styles/Login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/logosibus.png';
 import Logo3 from '../assets/SIBUS.png'
 
 const Login = () => {

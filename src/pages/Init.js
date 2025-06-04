@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { FaBus } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
 import CustomNavbar from '../components/Navbar';
@@ -23,7 +22,7 @@ const Init = () => {
     if (storedToken) setToken(storedToken);
   }, []);
 
-  const fetchRecibos = async () => {
+  const fetchRecibos = useCallback(async () => {
     if (!userData || !token) {
       setError('No se encontraron datos del usuario o token.');
       setLoading(false);
@@ -37,7 +36,7 @@ const Init = () => {
       const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -52,13 +51,13 @@ const Init = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userData, token]);
 
   useEffect(() => {
     if (userData && token) {
       fetchRecibos();
     }
-  }, [userData, token]);
+  }, [userData, token, fetchRecibos]);
 
   if (loading) {
     return (
@@ -79,9 +78,9 @@ const Init = () => {
         <Row className="justify-content-center mb-4">
           <Col xs={12} className="text-center">
             <div className='title_init'>
-                <h2 className='welc'>Bienvenido a </h2>
-                <h2 className='color_si'> Si</h2>
-                <h2>Bus</h2>
+              <h2 className='welc'>Bienvenido a </h2>
+              <h2 className='color_si'> Si</h2>
+              <h2>Bus</h2>
             </div>
           </Col>
         </Row>

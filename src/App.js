@@ -1,8 +1,8 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
-import Init from './pages/Init'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./App.css";
+import { HashRouter as Router, Routes, Route } from "react-router-dom"; //Cambio de BrowserRouter a HashRouter
+import Login from "./components/Login";
+import Init from "./pages/Init";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

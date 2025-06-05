@@ -1,0 +1,42 @@
+/* GerenciaInit.css */
+.gerencia-init {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.gerencia-content {
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.welcome-title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.user-name {
+  color: #4a6491;
+}
+
+.welcome-message {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.placeholder-box {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gerencia-content {
+    padding: 1.5rem;
+  }
+}

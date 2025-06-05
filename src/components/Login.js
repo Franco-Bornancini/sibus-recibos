@@ -18,6 +18,18 @@ const Login = () => {
     setError(null);
 
 
+    // if (legajo === 'abcd' && password === 'abcd') {
+    //   const mockUserData = {
+    //     Nombre: "Usuario Gerencia",
+    //     Legajo: "GER-001",
+    //     tipoUsuario: 2 // 2 = Gerencia
+    //   };
+    //   localStorage.setItem('user', JSON.stringify(mockUserData));
+    //   navigate('/gerencia');
+    //   return;
+    // }
+
+
     try {
       const tokenResponse = await fetch(`/api/token`, {
         method: 'POST',

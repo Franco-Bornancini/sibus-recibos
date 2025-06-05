@@ -32,6 +32,12 @@
     bottom: -100px;
     left: -100px;
 }
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
 .cuadro {
     margin-top: 0;
@@ -81,7 +87,7 @@
 }
 
 .form_inputs label{
-  text-align: center;
+    text-align: center;
 }
 .form_inputs input {
     border-radius: 5px;

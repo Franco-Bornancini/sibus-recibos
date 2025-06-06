@@ -14,10 +14,15 @@ const Recibos = ({ recibos, userLegajo, refetchRecibos }) => {
   const [filtroMes, setFiltroMes] = useState('');
 
   const handleSeleccion = async (recibo) => {
+
     const [mes, anio] = recibo.Mes.split('/');
-    const fileBase = `Leg${userLegajo}-${mes}-${anio}`;
-    const pdfPath = `/assets/Cprueba/${fileBase}.pdf`;
+    const legajoFormateado = userLegajo.toString().padStart(4, '0');
+    const secuencia = recibo.Secuencia;
+    const fileBase = `${anio}${mes}${secuencia}O${legajoFormateado}`;
+    const pdfPath = `/assets/Recibos/${fileBase}.pdf`;
     const fileName = `${fileBase}.png`;
+
+    console.log("PDF rute",pdfPath)
 
     try {
       const res = await fetch(pdfPath, { method: 'GET' });
@@ -36,10 +41,10 @@ const Recibos = ({ recibos, userLegajo, refetchRecibos }) => {
     const token = localStorage.getItem('token');
 
     const payload = {
-      NrLiq: reciboSeleccionado.NrLiq,
-      Legajo: userLegajo,
-      NrRecibo: reciboSeleccionado.NrRecibo,
-      Base64Image: base64,
+      Mes: reciboSeleccionado.Mes,           // ej: "04/2025"
+      Secuencia: reciboSeleccionado.Secuencia, // sin ceros a la izquierda
+      Legajo: userLegajo,                      // tal como fue ingresado
+      Base64Image: base64,                     // solo la parte base64
     };
 
     try {
@@ -94,7 +99,7 @@ const Recibos = ({ recibos, userLegajo, refetchRecibos }) => {
             <thead className="table-encabezado text-white">
               <tr>
                 <th>#</th>
-                <th>Nº Liquidación</th>
+                <th>Nº Sec.</th>
                 <th>Fecha</th>
                 <th>Acción</th>
               </tr>
@@ -103,7 +108,7 @@ const Recibos = ({ recibos, userLegajo, refetchRecibos }) => {
               {recibosFiltrados.map((recibo, index) => (
                 <tr key={`${recibo.NrLiq}-${recibo.NrRecibo}`} className={index % 2 === 0 ? 'fila-celeste' : 'fila-blanca'}>
                   <td>{index + 1}</td>
-                  <td>{recibo.NrLiq}</td>
+                  <td>{recibo.Secuencia}</td>
                   <td>{recibo.Mes}</td>
                   <td>
                     {recibo.Firmado === 1 ? (

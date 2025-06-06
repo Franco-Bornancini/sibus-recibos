@@ -20,16 +20,19 @@ const Login = () => {
     setError(null);
     setIsLoading(true);
 
+    // Condicional para ingreso Admin (Prueba)
     if (legajo === 'abcd' && password === 'abcd') {
       const mockUserData = {
         Nombre: "Usuario Gerencia",
         Legajo: "GER-001",
-        tipoUsuario: 2 // 2 = Gerencia
+        tipoUsuario: 2 
     };
     localStorage.setItem('user', JSON.stringify(mockUserData));
       navigate('/gerencia');
       return;
     }
+    // ---------------------------------------
+
 
     try {
       const tokenResponse = await fetch(`/api/token`, {
@@ -44,6 +47,7 @@ const Login = () => {
 
       const { token } = await tokenResponse.json();
 
+      // POST para obtener datos del usuario
       const userResponse = await fetch('/api/usuario', {
         method: 'POST',
         headers: {

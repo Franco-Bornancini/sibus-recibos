@@ -3,9 +3,13 @@ import { Button } from 'react-bootstrap';
 import "../styles/descrecibo.css"
 
 const DescargaRecibo = ({ recibo, userLegajo }) => {
-  const [mes, anio] = recibo.Mes.split('/');
-  const fileBase = `Leg${userLegajo}-${mes}-${anio}`;
-  const pdfPath = `/assets/Cprueba/${fileBase}.pdf`;
+
+    const [mes, anio] = recibo.Mes.split('/');
+    const legajoFormateado = userLegajo.toString().padStart(4, '0');
+    const secuencia = recibo.Secuencia; 
+    const fileBase = `${anio}${mes}${secuencia}O${legajoFormateado}`;
+    const pdfPath = `/assets/Recibos/${fileBase}.pdf`;
+    const fileName = `${fileBase}.png`;
   
 
   const handleDescarga = () => {

@@ -1,5 +1,5 @@
 .back {
-    background-color: white; /* Fondo blanco */
+    background-color: white;
     margin: 0;
     height: 100vh;
     width: 100%;
@@ -21,28 +21,56 @@
     z-index: 0;
 }
 
-/* Círculo superior derecho */
 .back::before {
     top: -100px;
     right: -100px;
 }
 
-/* Círculo inferior izquierdo */
 .back::after {
     bottom: -100px;
     left: -100px;
-}
-.loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 .cuadro {
     margin-top: 0;
     position: relative;
     z-index: 1;
+}
+
+.loading-active {
+    position: relative;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    border-radius: 4px;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.pink-bus-icon {
+    color: #ff66b2;
+    font-size: 2.5rem;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 .div_f {
@@ -71,7 +99,7 @@
     font-family: "Montserrat", sans-serif;
     font-weight: bold;
     font-size: 25px;
-    color: black; 
+    color: black;
     margin-bottom: 20px;
 }
 
@@ -82,13 +110,14 @@
     text-align: center;
     font-family: "Montserrat", sans-serif;
     font-weight: bold;
-    color: black; 
+    color: black;
     width: 100%;
 }
 
-.form_inputs label{
+.form_inputs label {
     text-align: center;
 }
+
 .form_inputs input {
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -118,14 +147,12 @@
     background-color: #ff3385;
 }
 
-.encuadro label {
-    display: block;
-    margin-bottom: 5px;
-    color: black; /* Texto negro */
-    text-align: left;
-    padding-left: 10%;
+.btn_init:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
-.Nav_f{
-    text-align: center !important;
+.error-message {
+    color: #ff3333;
+    margin: 10px 0;
 }

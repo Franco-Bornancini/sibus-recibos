@@ -48,10 +48,6 @@
   }
 }
 
-.logout-btn:hover {
-  color: #ff6b6b !important;
-}
-
 
 .logout-btn-mobile {
   display: flex;

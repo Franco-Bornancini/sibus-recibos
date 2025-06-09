@@ -1,48 +1,21 @@
-// import React from 'react';
-// import GerenciaNavbar from '../components/NavbarG';
-// import { Container } from 'react-bootstrap';
-// import '../styles/initG.css';
-
-// const GerenciaInit = () => {
-//   const userData = JSON.parse(localStorage.getItem('user'));
-
-//   return (
-//     <div className="gerencia-init">
-//       <GerenciaNavbar />
-      
-//       <Container className="gerencia-content">
-//         <h1 className="welcome-title">
-//           Bienvenido, <span className="user-name">{userData?.Nombre || 'Gerente'}</span>
-//         </h1>
-//         <p className="welcome-message">
-//           Panel de administración
-//         </p>
-        
-//         <div className="placeholder-box">
-//           <p>Contenido del dashboard</p>
-//         </div>
-//       </Container>
-//     </div>
-//   );
-// };
-
-// export default GerenciaInit;
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GerenciaNavbar from '../components/NavbarG';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { 
-  FaChartLine, 
-  FaUsers, 
-  FaFileAlt, 
+import {
+  FaChartLine,
+  FaUsers,
+  FaFileAlt,
   FaCalendarAlt,
   FaBell,
   FaCog
 } from 'react-icons/fa';
 import '../styles/initG.css';
 
-const GerenciaInit = () => {
-  const userData = JSON.parse(localStorage.getItem('user'));
+const AdminInit = () => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [token, setToken] = useState(null);
 
   const stats = [
     { title: "Empleados Activos", value: "142", icon: <FaUsers size={24} />, trend: "↑ 5%", color: "#4e73df" },
@@ -51,15 +24,27 @@ const GerenciaInit = () => {
     { title: "Alertas", value: "7", icon: <FaBell size={24} />, trend: "↑ 2", color: "#e74a3b" }
   ];
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
+
+    if (!storedUser || !storedToken) {
+      navigate('/'); // 🔐 Redirige si no hay sesión
+      return;
+    }
+
+    setUserData(JSON.parse(storedUser));
+    setToken(storedToken);
+  }, [navigate]);
+
   return (
     <div className="gerencia-init">
       <GerenciaNavbar />
-      
-      <Container fluid className="gerencia-content px-4">
 
+      <Container fluid className="gerencia-content px-4">
         <div className="dash-header">
           <h1 className="welcome-title">
-            Bienvenido, <span className="user-name">{'Administrador'}</span>
+            Bienvenido, <span className="user-name">{userData?.Nombre || 'Administrador'}</span>
           </h1>
           <div className="header-actions">
             <button className="action-btn">
@@ -67,7 +52,7 @@ const GerenciaInit = () => {
             </button>
           </div>
         </div>
-        
+
         <Row className="mt-4">
           {stats.map((stat, index) => (
             <Col xl={3} md={6} key={index} className="mb-4">
@@ -103,7 +88,7 @@ const GerenciaInit = () => {
               </Card.Body>
             </Card>
           </Col>
-          
+
           <Col xl={4} className="mb-4">
             <Card className="main-card">
               <Card.Header>
@@ -130,4 +115,4 @@ const GerenciaInit = () => {
   );
 };
 
-export default GerenciaInit;
+export default AdminInit;

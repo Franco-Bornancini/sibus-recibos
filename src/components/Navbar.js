@@ -19,7 +19,7 @@ function CustomNavbar({ userData }) {
     <Navbar expand="lg" className="sibus-navbar">
       <Container fluid className="navbar-container">
 
-        <Navbar.Brand href="/home" className="logo-brand">
+        <Navbar.Brand href="#/home" className="logo-brand">
           <img src={Logo3} alt="SiBus Logo" className="navbar-logo" />
         </Navbar.Brand>
         

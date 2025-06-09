@@ -1,6 +1,6 @@
 
 import '../styles/Login.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo3 from '../assets/SIBUS.png';
 import { FaBus } from 'react-icons/fa';
@@ -15,24 +15,27 @@ const Login = () => {
   const userS = 'S18u5';
   const userkey = 'S-Bu5*wS/25';
 
+  useEffect(() => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    // Condicional para ingreso Admin (Prueba)
     if (legajo === 'abcd' && password === 'abcd') {
       const mockUserData = {
         Nombre: "Usuario Gerencia",
         Legajo: "GER-001",
         tipoUsuario: 2 
-    };
-    localStorage.setItem('user', JSON.stringify(mockUserData));
-      navigate('/gerencia');
+      };
+      localStorage.setItem('user', JSON.stringify(mockUserData));
+      localStorage.setItem('token', 'token-falso-para-admin');
+      navigate('/administrador');
       return;
     }
-    // ---------------------------------------
-
 
     try {
       const tokenResponse = await fetch(`/api/token`, {
@@ -41,13 +44,10 @@ const Login = () => {
         body: JSON.stringify({ usuario: userS, clave: userkey })
       });
 
-      if (!tokenResponse.ok) {
-        throw new Error('Error al obtener token');
-      }
+      if (!tokenResponse.ok) throw new Error('Error al obtener token');
 
       const { token } = await tokenResponse.json();
 
-      // POST para obtener datos del usuario
       const userResponse = await fetch('/api/usuario', {
         method: 'POST',
         headers: {

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useCallback } from 'react';
 import { FaBus } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
@@ -5,6 +6,7 @@ import CustomNavbar from '../components/Navbar';
 import Recibos from './Recibos';
 import EmployeeCard from '../components/Card';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import '../styles/home.css';
 
 const Init = () => {
@@ -13,14 +15,20 @@ const Init = () => {
   const [recibos, setRecibos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
-    
-    if (storedUser) setUserData(JSON.parse(storedUser));
-    if (storedToken) setToken(storedToken);
-  }, []);
+
+    if (!storedUser || !storedToken) {
+      navigate('/');
+      return;
+    }
+
+    setUserData(JSON.parse(storedUser));
+    setToken(storedToken);
+  }, [navigate]);
 
   const fetchRecibos = useCallback(async () => {
     if (!userData || !token) {

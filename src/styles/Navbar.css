@@ -49,7 +49,7 @@
   transform: scale(1.1);
 }
 
-/* Responsive */
+
 @media (max-width: 992px) {
   .navbar-logo {
     height: 60px;
@@ -69,3 +69,67 @@
     display: none;
   }
 }
+
+/* Navbar Oscuro */
+/* .sibus-navbar {
+  background-color: #1a1a1a;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-logo {
+  height: 75px;
+  filter: brightness(0) invert(1);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar-logo:hover {
+  transform: scale(1.08);
+  filter: brightness(0) invert(0.9);
+}
+
+.navbar-right-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logout-btn {
+  padding: 0;
+  color: #ccc !important;
+  transition: all 0.3s ease;
+}
+
+.logout-icon {
+  font-size: 1.6rem;
+}
+
+.logout-btn:hover {
+  color: #ff6b6b !important;
+  transform: rotate(10deg);
+}
+
+@media (max-width: 992px) {
+  .navbar-logo {
+    height: 65px;
+    margin: 0 auto;
+  }
+  
+  .logo-brand {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .navbar-right-content {
+    position: absolute;
+    right: 1.5rem;
+  }
+} */

@@ -40,20 +40,26 @@ const Init = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await fetch(`/api/datos/recibos?IdLegajo=${userData.Legajo}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+
+      const sMes = '99/9999';        // todos los meses
+      const nSecuencia = 9;          // todas las secuencias
+
+      const response = await fetch(
+        `/api/Consultas/recibos?IdLegajo=${userData.Legajo}&sMes=${sMes}&nSecuencia=${nSecuencia}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error al obtener recibos: ${response.statusText}`);
       }
 
       const data = await response.json();
-      setRecibos(data);
+      setRecibos(data); // Esto ahora contiene más datos que pueden usarse en otros componentes
     } catch (err) {
       setError(err.message);
     } finally {
@@ -77,6 +83,9 @@ const Init = () => {
       </div>
     );
   }
+
+  console.log("userdata", userData)
+
 
   return (
     <div className="init-container">
@@ -113,6 +122,7 @@ const Init = () => {
               <Recibos
                 recibos={recibos}
                 userLegajo={userData?.Legajo}
+                userName={userData?.Nombre}
                 refetchRecibos={fetchRecibos}
               />
             </Col>

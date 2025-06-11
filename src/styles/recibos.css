@@ -51,4 +51,39 @@
   border-color: #000000;
   transition: 0.3s ease-in-out;
 }
+/* Estilos para los botones de acción */
+.btn-group-sm .btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.btn-group-sm .btn-outline-success:hover {
+  background-color: #198754;
+  color: white;
+}
+
+.btn-group-sm .btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+/* Espaciado para el botón de firmar */
+.btn-firma {
+  padding: 0.25rem 0.5rem;
+}
+
+/* Asegurar que los botones en grupo no tengan bordes dobles */
+.btn-group-sm > .btn:not(:first-child),
+.btn-group-sm > .btn-group:not(:first-child) > .btn {
+  border-left: 0;
+}
+
+.botons_actions{
+  justify-content: center;
+}
 

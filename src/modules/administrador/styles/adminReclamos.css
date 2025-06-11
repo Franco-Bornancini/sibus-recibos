@@ -1,0 +1,39 @@
+/* Estilos para la tabla de reclamos */
+.table-responsive {
+  margin-top: 20px;
+}
+
+.badge {
+  font-size: 0.9em;
+  padding: 5px 10px;
+}
+
+.btn-group .btn {
+  margin-left: 5px;
+}
+
+/* Mejorar aspecto de las tarjetas */
+.main-card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.main-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+}
+.admin-reclamos-container {
+  padding: 20px;
+}
+
+.admin-reclamos-container h2 {
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.table-actions {
+  white-space: nowrap;
+}

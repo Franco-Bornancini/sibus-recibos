@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GerenciaNavbar from '../components/NavbarG';
+// import GerenciaNavbar from '../components/NavbarG';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import {
   FaChartLine,
@@ -29,7 +29,7 @@ const AdminInit = () => {
     const storedToken = localStorage.getItem('token');
 
     if (!storedUser || !storedToken) {
-      navigate('/'); // 🔐 Redirige si no hay sesión
+      navigate('/');
       return;
     }
 
@@ -39,12 +39,12 @@ const AdminInit = () => {
 
   return (
     <div className="gerencia-init">
-      <GerenciaNavbar />
+      {/* <GerenciaNavbar /> */}
 
       <Container fluid className="gerencia-content px-4">
         <div className="dash-header">
           <h1 className="welcome-title">
-            Bienvenido, <span className="user-name">{userData?.Nombre || 'Administrador'}</span>
+            Bienvenido, <span className="user-name">{ 'Administrador'}</span>
           </h1>
           <div className="header-actions">
             <button className="action-btn">

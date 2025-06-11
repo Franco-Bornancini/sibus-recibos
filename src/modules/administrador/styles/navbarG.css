@@ -9,6 +9,10 @@
   height: 40px;
 }
 
+.logout-n{
+  color: rgb(255, 255, 255);
+}
+
 .hamburger-btn {
   border: none;
   color: white;

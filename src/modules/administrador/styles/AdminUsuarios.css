@@ -1,0 +1,47 @@
+/* Estilos para la tabla de usuarios */
+.main-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.main-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-mono {
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+/* Estilos para los botones de acción */
+.btn-outline-primary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-link {
+  padding: 0;
+  color: #6c757d;
+}
+
+.btn-link:hover {
+  color: #0d6efd;
+}
+
+/* Estilos para el modal */
+.modal-header {
+  background-color: #f8f9fa;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+}

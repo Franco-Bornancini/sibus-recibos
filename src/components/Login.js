@@ -149,7 +149,7 @@ const Login = () => {
   // Credenciales del administrador real
   const ADMIN_REAL = {
     legajo: '7393',
-    password: '8923'
+    password: '123456'
   };
 
   useEffect(() => {
@@ -259,6 +259,9 @@ const Login = () => {
                 {isLoading ? 'Ingresando...' : 'Ingresar'}
               </button>
             </form>
+            <div className="forgot-password-link">
+              <Link to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>
+            </div>
           </div>
           {isLoading && (
             <div className="loading-overlay">

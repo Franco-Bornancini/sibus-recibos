@@ -55,6 +55,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "javascript-obfuscator": "^2.19.1",
-    "webpack-obfuscator": "^3.3.0"
+    "webpack-obfuscator": "^3.3.0",
+    "workbox-cli": "^7.3.0"
   }
 }

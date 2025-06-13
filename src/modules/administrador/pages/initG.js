@@ -167,17 +167,17 @@ const AdminInit = () => {
       <Container fluid className="gerencia-content px-4">
         <div className="dash-header">
           <h1 className="welcome-title">
-            Bienvenido, <span className="user-name">{nombreUsuario}</span>
+            Bienvenido <span className="user-name">{nombreUsuario}</span>
           </h1>
-          <div className="header-actions">
+          {/* <div className="header-actions">
             <button className="action-btn">
               <FaCog className="me-2" /> Configuración
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Resto del código permanece igual */}
-        <Row className="mt-4">
+        {/* <Row className="mt-4">
           {stats.map((stat, index) => (
             <Col xl={3} md={6} key={index} className="mb-4">
               <Card className="stat-card">
@@ -196,9 +196,7 @@ const AdminInit = () => {
               </Card>
             </Col>
           ))}
-        </Row>
-
-        {/* ... resto del componente ... */}
+        </Row> */}
       </Container>
     </div>
   );

@@ -124,9 +124,9 @@ const AdminUsuarios = () => {
         <>
             <Card className="main-card">
                 <Card.Header className="d-flex justify-content-between align-items-center">
-                    <h5>Administración de Usuarios</h5>
+                    <h5>Administración de Empleados</h5>
                     <Badge bg="primary" pill>
-                        Total: {usuarios.length} usuarios
+                        Total: {usuarios.length} Empleados
                     </Badge>
                 </Card.Header>
                 <div className="mb-4 px-3">
@@ -150,7 +150,7 @@ const AdminUsuarios = () => {
                             <Spinner animation="border" role="status" variant="primary">
                                 <span className="visually-hidden">Cargando...</span>
                             </Spinner>
-                            <p className="mt-3">Cargando usuarios...</p>
+                            <p className="mt-3">Cargando Empleados...</p>
                         </div>
                     ) : (
                         <Table hover responsive>
@@ -158,7 +158,7 @@ const AdminUsuarios = () => {
                                 <tr>
                                     <th>Legajo</th>
                                     <th>Nombre</th>
-                                    <th>DNI</th>
+                                    <th>CUIL</th>
                                     <th>Contraseña</th>
                                     <th>Acciones</th>
                                 </tr>

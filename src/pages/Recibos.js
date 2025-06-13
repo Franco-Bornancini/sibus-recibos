@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Card, Row, Col, InputGroup } from 'react-bootstrap';
 import { FaEye, FaSearch, FaCheck, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
@@ -10,7 +11,8 @@ import '../styles/recibos.css';
 
 const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
   const [mostrarFirma, setMostrarFirma] = useState(false);
-  const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
+  const [reciboParaFirma, setReciboParaFirma] = useState(null); // Nuevo estado para firma
+  const [reciboParaReclamo, setReciboParaReclamo] = useState(null); // Nuevo estado para reclamo
   const [datosReciboActual, setDatosReciboActual] = useState(null);
   const [filtroMes, setFiltroMes] = useState('');
   const [mostrarResolucion, setMostrarResolucion] = useState(false);
@@ -27,7 +29,7 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
     try {
       const res = await fetch(pdfPath);
       if (!res.ok) return alert("El archivo PDF del recibo no está disponible.");
-      setReciboSeleccionado(recibo);
+      setReciboParaFirma(recibo); // Usamos el estado específico para firma
       setDatosReciboActual({ fileName, pdfPath });
       setMostrarFirma(true);
     } catch {
@@ -37,13 +39,13 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
 
   // Firma
   const handleFirmaConfirmada = async (firmaDataUrl) => {
-    if (!datosReciboActual || !reciboSeleccionado) return;
+    if (!datosReciboActual || !reciboParaFirma) return;
     const base64 = firmaDataUrl.split(',')[1];
     const token = localStorage.getItem('token');
 
     const payload = {
-      Mes: reciboSeleccionado.Mes,
-      Secuencia: reciboSeleccionado.Secuencia,
+      Mes: reciboParaFirma.Mes,
+      Secuencia: reciboParaFirma.Secuencia,
       Legajo: userLegajo,
       Base64Image: base64,
     };
@@ -63,7 +65,7 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
       localStorage.setItem('firmaEmpleado', base64);
 
       setMostrarFirma(false);
-      setReciboSeleccionado(null);
+      setReciboParaFirma(null);
       setDatosReciboActual(null);
 
       await refetchRecibos();
@@ -111,7 +113,6 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
 
       if (!protestaResponse.ok) throw new Error('Error al actualizar estado de protesta');
 
-      // 3. Actualizamos la lista de recibos
       await refetchRecibos();
       alert('Recibo validado correctamente');
       
@@ -175,7 +176,7 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
                     {recibo.Firmado === 1 ? (
                       <div className="d-flex flex-wrap gap-2">
                         <DescargaRecibo recibo={recibo} userLegajo={userLegajo} />
-                        {recibo.Valida !== 1 && ( // cambiar validado por valida
+                        {recibo.Valida !== 1 && (
                           <>
                             <Button
                               variant="success"
@@ -188,14 +189,14 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
                             <Button
                               variant="warning"
                               size="sm"
-                              onClick={() => setReciboSeleccionado(recibo)}
+                              onClick={() => setReciboParaReclamo(recibo)}
                               title="Reclamar diferencias"
                             >
                               <FaExclamationTriangle />
                             </Button>
                             {recibo.Resuelto === 1 && (
                               <Button
-                                variant="info"
+                                className="btn-naranja"
                                 size="sm"
                                 onClick={() => handleVerResolucion(recibo)}
                                 title="Ver resolución del reclamo"
@@ -205,7 +206,6 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
                             )}
                           </>
                         )}
-                        
                       </div>
                     ) : (
                       <Button
@@ -243,11 +243,11 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
       </Modal>
 
       {/* Modal para reclamo */}
-      {reciboSeleccionado && (
+      {reciboParaReclamo && (
         <ReclamoForm
-          show={!!reciboSeleccionado}
-          onHide={() => setReciboSeleccionado(null)}
-          recibo={reciboSeleccionado}
+          show={!!reciboParaReclamo}
+          onHide={() => setReciboParaReclamo(null)}
+          recibo={reciboParaReclamo}
           userLegajo={userLegajo}
           userName={userName}
           onReclamoSuccess={handleReclamoSuccess}

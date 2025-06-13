@@ -114,7 +114,7 @@ const Login = () => {
               </button>
             </form>
             <div className="forgot-password-link">
-              <Link to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>
+              <Link to="/recuperar-contrasena">Cambiar contraseña</Link>
             </div>
           </div>
           {isLoading && (

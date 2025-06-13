@@ -1,16 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.c5a0b214.css",
-    "main.js": "/static/js/main.b07ea51c.js",
-    "static/js/488.9a1bf562.chunk.js": "/static/js/488.9a1bf562.chunk.js",
+    "main.css": "/static/css/main.615f44b8.css",
+    "main.js": "/static/js/main.f7156851.js",
+    "static/js/239.82c8c9d1.chunk.js": "/static/js/239.82c8c9d1.chunk.js",
+    "static/js/977.c74b9558.chunk.js": "/static/js/977.c74b9558.chunk.js",
+    "static/js/455.23016627.chunk.js": "/static/js/455.23016627.chunk.js",
+    "static/js/488.9cd832af.chunk.js": "/static/js/488.9cd832af.chunk.js",
     "static/media/SIBUS.png": "/static/media/SIBUS.dbbe2dca108623945e6c.png",
+    "static/media/LogoChico.png": "/static/media/LogoChico.5fbc18011a064361a2e6.png",
     "index.html": "/index.html",
-    "main.c5a0b214.css.map": "/static/css/main.c5a0b214.css.map",
-    "main.b07ea51c.js.map": "/static/js/main.b07ea51c.js.map",
-    "488.9a1bf562.chunk.js.map": "/static/js/488.9a1bf562.chunk.js.map"
+    "main.615f44b8.css.map": "/static/css/main.615f44b8.css.map",
+    "main.f7156851.js.map": "/static/js/main.f7156851.js.map",
+    "239.82c8c9d1.chunk.js.map": "/static/js/239.82c8c9d1.chunk.js.map",
+    "977.c74b9558.chunk.js.map": "/static/js/977.c74b9558.chunk.js.map",
+    "455.23016627.chunk.js.map": "/static/js/455.23016627.chunk.js.map",
+    "488.9cd832af.chunk.js.map": "/static/js/488.9cd832af.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c5a0b214.css",
-    "static/js/main.b07ea51c.js"
+    "static/css/main.615f44b8.css",
+    "static/js/main.f7156851.js"
   ]
 }

@@ -35,6 +35,7 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
     }
   };
 
+  // Firma
   const handleFirmaConfirmada = async (firmaDataUrl) => {
     if (!datosReciboActual || !reciboSeleccionado) return;
     const base64 = firmaDataUrl.split(',')[1];
@@ -72,10 +73,12 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
     }
   };
 
+  // Validar recibo
   const handleAceptarRecibo = async (recibo) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/Procesos/valida`, {
+      
+      const validationResponse = await fetch(`/api/Procesos/valida`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,20 +92,41 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
         }),
       });
 
-      if (!response.ok) throw new Error('Error al validar el recibo');
+      if (!validationResponse.ok) throw new Error('Error al validar el recibo');
 
+      const protestaResponse = await fetch(`/api/Procesos/protesta`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          Mes: recibo.Mes,
+          Secuencia: recibo.Secuencia,
+          Legajo: userLegajo,
+          Protesta: 0,
+          ObsProt: recibo.ObsProt || ''
+        }),
+      });
+
+      if (!protestaResponse.ok) throw new Error('Error al actualizar estado de protesta');
+
+      // 3. Actualizamos la lista de recibos
       await refetchRecibos();
       alert('Recibo validado correctamente');
+      
     } catch (error) {
-      alert('Error al validar el recibo');
-      console.error(error);
+      alert('Error al procesar la validación');
+      console.error('Error completo:', error);
     }
   };
 
+  // Reclamo de recibo
   const handleReclamoSuccess = async () => {
     await refetchRecibos();
   };
 
+  // Resolucion del recibo
   const handleVerResolucion = (recibo) => {
     setResolucionActual(recibo);
     setMostrarResolucion(true);
@@ -151,7 +175,7 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
                     {recibo.Firmado === 1 ? (
                       <div className="d-flex flex-wrap gap-2">
                         <DescargaRecibo recibo={recibo} userLegajo={userLegajo} />
-                        {recibo.Validado !== 1 && ( // cambiar validado por valida
+                        {recibo.Valida !== 1 && ( // cambiar validado por valida
                           <>
                             <Button
                               variant="success"
@@ -169,18 +193,19 @@ const Recibos = ({ recibos, userLegajo, userName, refetchRecibos }) => {
                             >
                               <FaExclamationTriangle />
                             </Button>
+                            {recibo.Resuelto === 1 && (
+                              <Button
+                                variant="info"
+                                size="sm"
+                                onClick={() => handleVerResolucion(recibo)}
+                                title="Ver resolución del reclamo"
+                              >
+                                <FaEye className="me-1" />
+                              </Button>
+                            )}
                           </>
                         )}
-                        {recibo.Resuelto === 1 && (
-                          <Button
-                            variant="info"
-                            size="sm"
-                            onClick={() => handleVerResolucion(recibo)}
-                            title="Ver resolución del reclamo"
-                          >
-                            <FaEye className="me-1" />
-                          </Button>
-                        )}
+                        
                       </div>
                     ) : (
                       <Button

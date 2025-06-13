@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button, Alert } from 'react-bootstrap';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { generateReclamoPDF } from '../components/generateReclamoPDF';
 
 const ReclamoForm = ({ 
     show, 
@@ -15,9 +14,6 @@ const ReclamoForm = ({
     const [motivo, setMotivo] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    // Debug: verificar props recibidas
-    console.log("Props en ReclamoForm:", { userLegajo, userName, recibo });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,17 +73,6 @@ const ReclamoForm = ({
                 throw new Error('Error al dejar la resolución pendiente');
             }
 
-            // 3. Generar PDF del reclamo
-            const pdfFileName = await generateReclamoPDF({
-                legajo: userLegajo,
-                nombre: userName,
-                mes: recibo?.Mes || '',
-                secuencia: recibo?.Secuencia || '',
-                motivo,
-                firmaBase64: localStorage.getItem('firmaBase64') || null
-            });
-
-            onReclamoSuccess(pdfFileName);
             onHide();
 
         } catch (err) {

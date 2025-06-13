@@ -1,40 +1,8 @@
-// import React from 'react';
-// import { Modal, Button } from 'react-bootstrap';
-
-// const ResolucionModal = ({
-//     show,
-//     onHide,
-//     recibo,
-//     userName,
-//     onReclamarDeNuevo
-//     }) => {
-
-//     return (
-//         <Modal show={show} onHide={onHide} centered>
-//         <Modal.Header closeButton>
-//             <Modal.Title>Resolución del Reclamo</Modal.Title>
-//         </Modal.Header>
-//         <Modal.Body>
-//             <p><strong>Mensaje:</strong> {recibo.ObsRes || 'No disponible'}</p>
-//             <p><strong>Respondido por:</strong> {recibo.UsrRes || 'No disponible'}</p>
-//             <p><strong>Fecha:</strong> {recibo.FechaRes || 'No disponible'}</p>
-//         </Modal.Body>
-//         <Modal.Footer>
-//             <Button variant="secondary" onClick={onHide}>
-//             Cerrar
-//             </Button>
-//             <Button variant="warning" onClick={onReclamarDeNuevo}>
-//             No estoy conforme - Reclamar de nuevo
-//             </Button>
-//         </Modal.Footer>
-//         </Modal>
-//     );
-// };
-
-// export default ResolucionModal;
 
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { BsInfoCircle } from 'react-icons/bs';
+import "../styles/ResolucionModal.css"
 
 const ResolucionModal = ({ show, onHide, resolucion }) => {
   if (!resolucion) return null;
@@ -45,8 +13,11 @@ const ResolucionModal = ({ show, onHide, resolucion }) => {
 
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Resolución del Reclamo</Modal.Title>
+      <Modal.Header closeButton className="bg-dark text-white">
+        <Modal.Title>
+          <BsInfoCircle className="me-2" />
+          Resolución del Reclamo
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p><strong>Mensaje del Administrador:</strong></p>
@@ -56,7 +27,7 @@ const ResolucionModal = ({ show, onHide, resolucion }) => {
         <p><strong>Respondido por:</strong> {usuarioRespuesta}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>Cerrar</Button>
+        <Button variant="dark" onClick={onHide}>Cerrar</Button>
       </Modal.Footer>
     </Modal>
   );

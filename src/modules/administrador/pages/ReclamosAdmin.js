@@ -200,8 +200,6 @@ const AdminReclamos = () => {
         }
     }, []);
 
-    console.log(adminData) // viendo datos del administrador
-
     const fetchReclamos = async () => {
         try {
             setLoading(true);
@@ -243,22 +241,43 @@ const AdminReclamos = () => {
 
     const verReclamoPDF = async (recibo) => {
         try {
+            const token = localStorage.getItem('token');
+            const legajo = parseInt(recibo.Legajo);
+            
+            // 1. Obtener datos del empleado
+            const params = new URLSearchParams({ IdLegajo: legajo });
+            const response = await fetch(`/api/Consultas/empleados?${params.toString()}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            let nombreEmpleado = recibo.Nombre || 'Nombre no disponible';
+
+            if (response.ok) {
+                const data = await response.json();
+                nombreEmpleado = data[0].Nombre
+            } else {
+                console.warn('No se pudo obtener información del empleado, código:', response.status);
+            }
+
+            // 2. Preparar datos para el PDF
             const datosReclamo = {
                 legajo: recibo.Legajo,
-                nombre: recibo.Nombre || '', // puede venir vacío
+                nombre: nombreEmpleado,
                 mes: recibo.Mes,
                 secuencia: recibo.Secuencia,
                 motivo: recibo.ObsProt || 'Motivo no especificado',
                 firmaBase64: recibo.Firma,
                 fechaProtesta: recibo.FechaProtesta,
             };
-
+            // 3. Generar PDF
             const { url } = await generateReclamoPDF(datosReclamo);
             window.open(url, '_blank');
         } catch (error) {
-            setError('Error generando PDF del reclamo');
+            console.error('Error completo al generar PDF:', error);
+            setError(`Error generando PDF: ${error.message}`);
         }
     };
+
 
     const abrirModal = (recibo) => {
         setReciboActual(recibo);
@@ -277,16 +296,16 @@ const AdminReclamos = () => {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Token no encontrado');
 
-            // ✅ 1. Marcar como resuelto (incluye nombre del admin que resolvió)
+            //  Marcar como resuelto
             const datosResuelto = {
                 legajo: reciboActual.Legajo,
                 mes: reciboActual.Mes,
                 secuencia: reciboActual.Secuencia,
                 Resuelto: 1,
-                usrRes: adminData.legajo,
-                nomRes: adminData.nombre, // ✅ AGREGADO
+                usrRes: adminData.Nombre,
                 obsRes: obsRes || 'Resuelto sin observaciones',
             };
+            console.log("datos resuelto",datosResuelto)
 
             await axios.post('/api/Procesos/resuelto', datosResuelto, {
                 headers: { Authorization: `Bearer ${token}` },

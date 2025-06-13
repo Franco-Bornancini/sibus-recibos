@@ -3,21 +3,13 @@
   "name": "SiBus",
   "icons": [
     {
-      "src": "LogoChico.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "LogoChico.png",
-      "type": "image/png",
+      "src": "LogoChico_512x512.png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#FF7B25",
-  "background_color": "#ffffff",
-  "orientation": "portrait"
+  "theme_color": "#ffffff",
+  "background_color": "#FF00FF"
 }

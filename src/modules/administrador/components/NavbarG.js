@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 import { Navbar, Container, Nav, Offcanvas, Button } from 'react-bootstrap';
 import { FaSignOutAlt } from 'react-icons/fa';
-import Logo from '../../../assets/SIBUS.png';
 import Logo2 from '../../../assets/Logo-Blanco.png';
-import Logo3 from '../../../assets/Sibusmov2.jpg';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/navbarG.css';
 

@@ -1,22 +1,4 @@
-// // components/ConfirmarRecibo.js
-// import React from 'react';
-// import { Button } from 'react-bootstrap';
-// import { FaCheck } from 'react-icons/fa';
 
-// const confirmarRecibo = ({ recibo, onConfirmar }) => {
-//     return (
-//         <Button 
-//         variant="success" 
-//         size="sm" 
-//         onClick={() => onConfirmar(recibo)}
-//         title="Aceptar recibo"
-//         >
-//         <FaCheck />
-//         </Button>
-//     );
-// };
-
-// export default confirmarRecibo;
 import React , {useState} from 'react';
 import { Button } from 'react-bootstrap';
 import { FaCheck } from 'react-icons/fa';

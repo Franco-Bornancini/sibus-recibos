@@ -1,258 +1,12 @@
 
-// import React, { useEffect, useState } from 'react';
-// import { generateReclamoPDF } from '../../../components/generateReclamoPDF';
-// import { Container, Table, Button, Badge, Alert, Spinner, Modal, Form } from 'react-bootstrap';
-// import { FaCheck, FaEye } from 'react-icons/fa';
-// import axios from 'axios';
-// import '../styles/adminReclamos.css';
-
-// const AdminReclamos = () => {
-//     const [reclamos, setReclamos] = useState([]);
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
-//     const [successMsg, setSuccessMsg] = useState(null);
-//     const [adminData, setAdminData] = useState(null);
-//     const [showModal, setShowModal] = useState(false);
-//     const [reciboActual, setReciboActual] = useState(null);
-//     const [obsRes, setObsRes] = useState('');
-
-//     useEffect(() => {
-//         const storedUser = localStorage.getItem('user');
-//         if (storedUser) {
-//             setAdminData(JSON.parse(storedUser));
-//         }
-//     }, []);
-
-//     const fetchReclamos = async () => {
-//         try {
-//             setLoading(true);
-//             setError(null);
-
-//             const token = localStorage.getItem('token');
-//             if (!token) throw new Error('Token no encontrado. Inicie sesión nuevamente.');
-
-//             const params = {
-//                 sMes: '99/9999',
-//                 IdLegajo: 0,
-//                 nFirmado: 1,
-//                 nValidado: 0,
-//                 nProtestado: 1,
-//                 nResuelto: 0,
-//             };
-
-//             const response = await axios.get('/api/Consultas/consultarecibos', {
-//                 params,
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                 },
-//             });
-
-//             const reclamosFiltrados = response.data.filter((recibo) => recibo.Protesta === 1);
-//             setReclamos(reclamosFiltrados);
-//         } catch (err) {
-//             setError(err.response?.data?.message || err.message || 'Error al obtener los reclamos');
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     useEffect(() => {
-//         if (adminData) {
-//             fetchReclamos();
-//         }
-//     }, [adminData]);
-
-//     const verReclamoPDF = async (recibo) => {
-//         try {
-//             const token = localStorage.getItem('token');
-//             const legajo = parseInt(recibo.Legajo);
-            
-//             // 1. Obtener datos del empleado
-//             const params = new URLSearchParams({ IdLegajo: legajo });
-//             const response = await fetch(`/api/Consultas/empleados?${params.toString()}`, {
-//                 headers: { 'Authorization': `Bearer ${token}` }
-//             });
-
-//             let nombreEmpleado = recibo.Nombre || 'Nombre no disponible';
-
-//             if (response.ok) {
-//                 const data = await response.json();
-//                 nombreEmpleado = data[0].Nombre
-//             } else {
-//                 console.warn('No se pudo obtener información del empleado, código:', response.status);
-//             }
-
-//             // 2. Preparar datos para el PDF
-//             const datosReclamo = {
-//                 legajo: recibo.Legajo,
-//                 nombre: nombreEmpleado,
-//                 mes: recibo.Mes,
-//                 secuencia: recibo.Secuencia,
-//                 motivo: recibo.ObsProt || 'Motivo no especificado',
-//                 firmaBase64: recibo.Firma,
-//                 fechaProtesta: recibo.FechaProtesta,
-//             };
-//             // 3. Generar PDF
-//             const { url } = await generateReclamoPDF(datosReclamo);
-//             window.open(url, '_blank');
-//         } catch (error) {
-//             console.error('Error completo al generar PDF:', error);
-//             setError(`Error generando PDF: ${error.message}`);
-//         }
-//     };
-
-
-//     const abrirModal = (recibo) => {
-//         setReciboActual(recibo);
-//         setObsRes('');
-//         setShowModal(true);
-//     };
-
-//     const enviarResolucion = async () => {
-//         if (!reciboActual || !adminData) return;
-
-//         try {
-//             setLoading(true);
-//             setError(null);
-//             setShowModal(false);
-
-//             const token = localStorage.getItem('token');
-//             if (!token) throw new Error('Token no encontrado');
-
-//             //  Marcar como resuelto
-//             const datosResuelto = {
-//                 legajo: reciboActual.Legajo,
-//                 mes: reciboActual.Mes,
-//                 secuencia: reciboActual.Secuencia,
-//                 Resuelto: 1,
-//                 usrRes: adminData.Nombre,
-//                 obsRes: obsRes || 'Resuelto sin observaciones',
-//             };
-//             console.log("datos resuelto",datosResuelto)
-
-//             await axios.post('/api/Procesos/resuelto', datosResuelto, {
-//                 headers: { Authorization: `Bearer ${token}` },
-//             });
-
-//             // 2. Quitar protesta
-//             const datosProtesta = {
-//                 Legajo: reciboActual.Legajo,
-//                 Mes: reciboActual.Mes,
-//                 Secuencia: reciboActual.Secuencia,
-//                 Protesta: 0,
-//                 ObsProt: "",
-//             };
-
-//             await axios.post('/api/Procesos/protesta', datosProtesta, {
-//                 headers: { Authorization: `Bearer ${token}` },
-//             });
-
-//             setSuccessMsg('Reclamo resuelto correctamente');
-//             fetchReclamos();
-//         } catch (err) {
-//             setError(err.response?.data?.message || err.message);
-//         } finally {
-//             setLoading(false);
-//             setReciboActual(null);
-//         }
-//     };
-
-//     const formatFecha = (fecha) => {
-//         if (!fecha) return 'No disponible';
-//         return new Date(fecha).toLocaleDateString('es-AR');
-//     };
-
-//     return (
-//         <Container fluid className="admin-reclamos-container">
-//             <h2 className="mb-4">Gestión de Reclamos</h2>
-
-//             {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
-//             {successMsg && <Alert variant="success" onClose={() => setSuccessMsg(null)} dismissible>{successMsg}</Alert>}
-
-//             {loading ? (
-//                 <div className="text-center">
-//                     <Spinner animation="border" role="status" />
-//                     <p>Cargando reclamos...</p>
-//                 </div>
-//             ) : (
-//                 <>
-//                     {reclamos.length === 0 ? (
-//                         <Alert variant="info">No hay reclamos pendientes para mostrar.</Alert>
-//                     ) : (
-//                         <Table striped bordered hover responsive className="mt-3">
-//                             <thead>
-//                                 <tr>
-//                                     <th>Legajo</th>
-//                                     <th>Mes</th>
-//                                     <th>Secuencia</th>
-//                                     <th>Fecha Protesta</th>
-//                                     <th>Estado</th>
-//                                     <th>Acciones</th>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {reclamos.map((recibo, index) => (
-//                                     <tr key={index}>
-//                                         <td>{recibo.Legajo}</td>
-//                                         <td>{recibo.Mes}</td>
-//                                         <td>{recibo.Secuencia}</td>
-//                                         <td>{formatFecha(recibo.FechaProtesta)}</td>
-//                                         <td>
-//                                             <Badge bg={recibo.Resuelto === 1 ? "success" : "warning"}>
-//                                                 {recibo.Resuelto === 1 ? "Resuelto" : "Pendiente"}
-//                                             </Badge>
-//                                         </td>
-//                                         <td>
-//                                             <Button variant="primary" size="sm" onClick={() => verReclamoPDF(recibo)} className="me-2">
-//                                                 <FaEye className="me-1" />
-//                                             </Button>
-//                                             {recibo.Resuelto !== 1 && (
-//                                                 <Button variant="success" size="sm" onClick={() => abrirModal(recibo)} disabled={loading}>
-//                                                     <FaCheck className="me-1" />
-//                                                 </Button>
-//                                             )}
-//                                         </td>
-//                                     </tr>
-//                                 ))}
-//                             </tbody>
-//                         </Table>
-//                     )}
-//                 </>
-//             )}
-
-//             {/* Modal para mensaje de resolución */}
-//             <Modal show={showModal} onHide={() => setShowModal(false)}>
-//                 <Modal.Header closeButton>
-//                     <Modal.Title>Resolver Reclamo</Modal.Title>
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <Form.Group controlId="obsRes">
-//                         <Form.Label>Mensaje de resolución</Form.Label>
-//                         <Form.Control
-//                             as="textarea"
-//                             rows={3}
-//                             value={obsRes}
-//                             onChange={(e) => setObsRes(e.target.value)}
-//                             placeholder="Ingrese un comentario para el empleado..."
-//                         />
-//                     </Form.Group>
-//                 </Modal.Body>
-//                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-//                     <Button variant="primary" onClick={enviarResolucion}>Confirmar</Button>
-//                 </Modal.Footer>
-//             </Modal>
-//         </Container>
-//     );
-// };
-
-// export default AdminReclamos;
-
 import React, { useEffect, useState } from 'react';
 import { generateReclamoPDF } from '../../../components/generateReclamoPDF';
 import { Container, Table, Button, Badge, Alert, Spinner, Modal, Form } from 'react-bootstrap';
 import { FaCheck, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import AdminRes from '../components/AdminRes';
+import { BsInfoCircle } from 'react-icons/bs'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import '../styles/adminReclamos.css';
 
 const AdminReclamos = () => {
@@ -265,6 +19,8 @@ const AdminReclamos = () => {
     const [reciboActual, setReciboActual] = useState(null);
     const [obsRes, setObsRes] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('pendientes');
+    const [showModalResolucion, setShowModalResolucion] = useState(false);
+    const [resolucionSeleccionada, setResolucionSeleccionada] = useState(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -302,7 +58,7 @@ const AdminReclamos = () => {
                 params.nResuelto = 1;
             } else if (filtroEstado === 'validados') {
                 params.nValidado = 1;
-                params.nResuelto = 9;
+                params.nResuelto = 1;
             }
 
             const response = await axios.get('/api/Consultas/consultarecibos', {
@@ -431,6 +187,11 @@ const AdminReclamos = () => {
         }
     };
 
+    const verResolucion = (recibo) => {
+        setResolucionSeleccionada(recibo);
+        setShowModalResolucion(true);
+    };
+
     return (
         <Container fluid className="admin-reclamos-container">
             <h2 className="mb-4">Gestión de Reclamos</h2>
@@ -498,23 +259,41 @@ const AdminReclamos = () => {
                                             </Badge>
                                         </td>
                                         <td>
-                                            <Button
-                                                variant="primary"
-                                                size="sm"
-                                                onClick={() => verReclamoPDF(recibo)}
-                                                className="me-2"
-                                            >
-                                                <FaEye className="me-1" />
-                                            </Button>
-                                            {recibo.Resuelto !== 1 && (
+                                            <OverlayTrigger placement="top" overlay={<Tooltip>Ver Reclamo</Tooltip>}>
                                                 <Button
-                                                    variant="success"
+                                                    variant="primary"
                                                     size="sm"
-                                                    onClick={() => abrirModal(recibo)}
-                                                    disabled={loading}
+                                                    onClick={() => verReclamoPDF(recibo)}
+                                                    className="me-2"
                                                 >
-                                                    <FaCheck className="me-1" />
+                                                    <FaEye className="me-1" />
                                                 </Button>
+                                            </OverlayTrigger>
+                                            {recibo.Resuelto !== 1 && (
+                                                <OverlayTrigger placement="top" overlay={<Tooltip>Resolver Reclamo</Tooltip>}>
+                                                    <Button
+                                                        variant="success"
+                                                        size="sm"
+                                                        onClick={() => abrirModal(recibo)}
+                                                        disabled={loading}
+                                                    >
+                                                        <FaCheck className="me-1" />
+                                                    </Button>
+                                                </OverlayTrigger>
+                                                
+                                            )}
+                                            {(recibo.Resuelto === 1 || recibo.Valida === 1) && (
+                                                <OverlayTrigger placement="top" overlay={<Tooltip>Ver Resolucion</Tooltip>}>
+                                                    <Button
+                                                        variant="info"
+                                                        size="sm"
+                                                        className="me-2"
+                                                        onClick={() => verResolucion(recibo)}
+                                                    >
+                                                        <BsInfoCircle />
+                                                    </Button>
+                                                </OverlayTrigger>
+                                                
                                             )}
                                         </td>
                                     </tr>
@@ -546,6 +325,11 @@ const AdminReclamos = () => {
                     <Button variant="primary" onClick={enviarResolucion}>Confirmar</Button>
                 </Modal.Footer>
             </Modal>
+            <AdminRes
+                show={showModalResolucion}
+                onHide={() => setShowModalResolucion(false)}
+                resolucion={resolucionSeleccionada}
+            />
         </Container>
     );
 };

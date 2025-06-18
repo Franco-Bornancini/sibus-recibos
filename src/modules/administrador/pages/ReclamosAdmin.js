@@ -1,8 +1,8 @@
 
 // import React, { useEffect, useState } from 'react';
 // import { generateReclamoPDF } from '../../../components/generateReclamoPDF';
-// import { Container, Table, Button, Badge, Alert, Spinner } from 'react-bootstrap';
-// import { FaFilePdf, FaCheck, FaEye } from 'react-icons/fa';
+// import { Container, Table, Button, Badge, Alert, Spinner, Modal, Form } from 'react-bootstrap';
+// import { FaCheck, FaEye } from 'react-icons/fa';
 // import axios from 'axios';
 // import '../styles/adminReclamos.css';
 
@@ -12,100 +12,148 @@
 //     const [error, setError] = useState(null);
 //     const [successMsg, setSuccessMsg] = useState(null);
 //     const [adminData, setAdminData] = useState(null);
+//     const [showModal, setShowModal] = useState(false);
+//     const [reciboActual, setReciboActual] = useState(null);
+//     const [obsRes, setObsRes] = useState('');
 
 //     useEffect(() => {
 //         const storedUser = localStorage.getItem('user');
 //         if (storedUser) {
-//         setAdminData(JSON.parse(storedUser));
+//             setAdminData(JSON.parse(storedUser));
 //         }
 //     }, []);
 
 //     const fetchReclamos = async () => {
 //         try {
-//         setLoading(true);
-//         setError(null);
+//             setLoading(true);
+//             setError(null);
 
-//         const token = localStorage.getItem('token');
-//         if (!token) throw new Error('Token no encontrado. Inicie sesión nuevamente.');
+//             const token = localStorage.getItem('token');
+//             if (!token) throw new Error('Token no encontrado. Inicie sesión nuevamente.');
 
-//         const params = {
-//             sMes: '99/9999',
-//             IdLegajo: 0,
-//             nFirmado: 1,
-//             nValidado: 0,
-//             nProtestado: 1,
-//             nResuelto: 0,
-//         };
+//             const params = {
+//                 sMes: '99/9999',
+//                 IdLegajo: 0,
+//                 nFirmado: 1,
+//                 nValidado: 0,
+//                 nProtestado: 1,
+//                 nResuelto: 0,
+//             };
 
-//         const response = await axios.get('/api/Consultas/consultarecibos', {
-//             params,
-//             headers: {
-//             Authorization: `Bearer ${token}`,
-//             },
-//         });
+//             const response = await axios.get('/api/Consultas/consultarecibos', {
+//                 params,
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                 },
+//             });
 
-//         const reclamosFiltrados = response.data.filter((recibo) => recibo.Protesta === 1);
-//         setReclamos(reclamosFiltrados);
+//             const reclamosFiltrados = response.data.filter((recibo) => recibo.Protesta === 1);
+//             setReclamos(reclamosFiltrados);
 //         } catch (err) {
-//         setError(err.response?.data?.message || err.message || 'Error al obtener los reclamos');
+//             setError(err.response?.data?.message || err.message || 'Error al obtener los reclamos');
 //         } finally {
-//         setLoading(false);
+//             setLoading(false);
 //         }
 //     };
 
 //     useEffect(() => {
 //         if (adminData) {
-//         fetchReclamos();
+//             fetchReclamos();
 //         }
 //     }, [adminData]);
 
 //     const verReclamoPDF = async (recibo) => {
 //         try {
-//         const datosReclamo = {
-//             legajo: recibo.Legajo,
-//             nombre: recibo.Nombre, // me devuelve undefine, no esta este campo
-//             mes: recibo.Mes,
-//             secuencia: recibo.Secuencia,
-//             motivo: recibo.ObsProt || 'Motivo no especificado',
-//             firmaBase64: recibo.Firma,
-//             fechaProtesta: recibo.FechaProtesta,
-//         };
+//             const token = localStorage.getItem('token');
+//             const legajo = parseInt(recibo.Legajo);
+            
+//             // 1. Obtener datos del empleado
+//             const params = new URLSearchParams({ IdLegajo: legajo });
+//             const response = await fetch(`/api/Consultas/empleados?${params.toString()}`, {
+//                 headers: { 'Authorization': `Bearer ${token}` }
+//             });
 
-//         const { url } = await generateReclamoPDF(datosReclamo);
-//         window.open(url, '_blank');
+//             let nombreEmpleado = recibo.Nombre || 'Nombre no disponible';
+
+//             if (response.ok) {
+//                 const data = await response.json();
+//                 nombreEmpleado = data[0].Nombre
+//             } else {
+//                 console.warn('No se pudo obtener información del empleado, código:', response.status);
+//             }
+
+//             // 2. Preparar datos para el PDF
+//             const datosReclamo = {
+//                 legajo: recibo.Legajo,
+//                 nombre: nombreEmpleado,
+//                 mes: recibo.Mes,
+//                 secuencia: recibo.Secuencia,
+//                 motivo: recibo.ObsProt || 'Motivo no especificado',
+//                 firmaBase64: recibo.Firma,
+//                 fechaProtesta: recibo.FechaProtesta,
+//             };
+//             // 3. Generar PDF
+//             const { url } = await generateReclamoPDF(datosReclamo);
+//             window.open(url, '_blank');
 //         } catch (error) {
-//         setError('Error generando PDF del reclamo');
+//             console.error('Error completo al generar PDF:', error);
+//             setError(`Error generando PDF: ${error.message}`);
 //         }
 //     };
 
-//     const resolverReclamo = async (recibo) => {
+
+//     const abrirModal = (recibo) => {
+//         setReciboActual(recibo);
+//         setObsRes('');
+//         setShowModal(true);
+//     };
+
+//     const enviarResolucion = async () => {
+//         if (!reciboActual || !adminData) return;
+
 //         try {
-//         setLoading(true);
+//             setLoading(true);
+//             setError(null);
+//             setShowModal(false);
 
-//         const token = localStorage.getItem('token');
-//         if (!token) throw new Error('Token no encontrado. Inicie sesión nuevamente.');
+//             const token = localStorage.getItem('token');
+//             if (!token) throw new Error('Token no encontrado');
 
-//         const datosActualizacion = {
-//             legajo: recibo.Legajo,
-//             mes: recibo.Mes,
-//             secuencia: recibo.Secuencia,
-//             Resuelto: 1,
-//             usrRes: adminData?.legajo || 'abcd',
-//             obsRes: 'Reclamo resuelto por administrador',
-//         };
+//             //  Marcar como resuelto
+//             const datosResuelto = {
+//                 legajo: reciboActual.Legajo,
+//                 mes: reciboActual.Mes,
+//                 secuencia: reciboActual.Secuencia,
+//                 Resuelto: 1,
+//                 usrRes: adminData.Nombre,
+//                 obsRes: obsRes || 'Resuelto sin observaciones',
+//             };
+//             console.log("datos resuelto",datosResuelto)
 
-//         await axios.post('/api/Procesos/resuelto', datosActualizacion, {
-//             headers: {
-//             Authorization: `Bearer ${token}`,
-//             },
-//         });
+//             await axios.post('/api/Procesos/resuelto', datosResuelto, {
+//                 headers: { Authorization: `Bearer ${token}` },
+//             });
 
-//         setSuccessMsg('Reclamo marcado como resuelto correctamente');
-//         fetchReclamos(); // Actualizar reclamos
+//             // 2. Quitar protesta
+//             const datosProtesta = {
+//                 Legajo: reciboActual.Legajo,
+//                 Mes: reciboActual.Mes,
+//                 Secuencia: reciboActual.Secuencia,
+//                 Protesta: 0,
+//                 ObsProt: "",
+//             };
+
+//             await axios.post('/api/Procesos/protesta', datosProtesta, {
+//                 headers: { Authorization: `Bearer ${token}` },
+//             });
+
+//             setSuccessMsg('Reclamo resuelto correctamente');
+//             fetchReclamos();
 //         } catch (err) {
-//         setError(err.response?.data?.message || err.message || 'Error al resolver el reclamo');
+//             setError(err.response?.data?.message || err.message);
 //         } finally {
-//         setLoading(false);
+//             setLoading(false);
+//             setReciboActual(null);
 //         }
 //     };
 
@@ -116,66 +164,90 @@
 
 //     return (
 //         <Container fluid className="admin-reclamos-container">
-//         <h2 className="mb-4">Gestión de Reclamos</h2>
+//             <h2 className="mb-4">Gestión de Reclamos</h2>
 
-//         {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
-//         {successMsg && <Alert variant="success" onClose={() => setSuccessMsg(null)} dismissible>{successMsg}</Alert>}
+//             {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
+//             {successMsg && <Alert variant="success" onClose={() => setSuccessMsg(null)} dismissible>{successMsg}</Alert>}
 
-//         {loading ? (
-//             <div className="text-center">
-//             <Spinner animation="border" role="status" />
-//             <p>Cargando reclamos...</p>
-//             </div>
-//         ) : (
-//             <>
-//             {reclamos.length === 0 ? (
-//                 <Alert variant="info">No hay reclamos pendientes para mostrar.</Alert>
+//             {loading ? (
+//                 <div className="text-center">
+//                     <Spinner animation="border" role="status" />
+//                     <p>Cargando reclamos...</p>
+//                 </div>
 //             ) : (
-//                 <Table striped bordered hover responsive className="mt-3">
-//                 <thead>
-//                     <tr>
-//                     <th>Legajo</th>
-//                     <th>Mes</th>
-//                     <th>Secuencia</th>
-//                     <th>Fecha Protesta</th>
-//                     <th>Estado</th>
-//                     <th>Acciones</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {reclamos.map((recibo, index) => (
-//                     <tr key={index}>
-//                         <td>{recibo.Legajo}</td>
-//                         <td>{recibo.Mes}</td>
-//                         <td>{recibo.Secuencia}</td>
-//                         <td>{formatFecha(recibo.FechaProtesta)}</td>
-//                         <td>
-//                         <Badge bg={recibo.Resuelto === 1 ? "success" : "warning"}>
-//                             {recibo.Resuelto === 1 ? "Resuelto" : "Pendiente"}
-//                         </Badge>
-//                         </td>
-//                         <td>
-//                         <Button variant="primary" size="sm" onClick={() => verReclamoPDF(recibo)} className="me-2">
-//                             <FaEye className="me-1" />
-//                         </Button>
-//                         {recibo.Resuelto !== 1 && (
-//                             <Button variant="success" size="sm" onClick={() => resolverReclamo(recibo)} disabled={loading}>
-//                             <FaCheck className="me-1" />
-//                             </Button>
-//                         )}
-//                         </td>
-//                     </tr>
-//                     ))}
-//                 </tbody>
-//                 </Table>
+//                 <>
+//                     {reclamos.length === 0 ? (
+//                         <Alert variant="info">No hay reclamos pendientes para mostrar.</Alert>
+//                     ) : (
+//                         <Table striped bordered hover responsive className="mt-3">
+//                             <thead>
+//                                 <tr>
+//                                     <th>Legajo</th>
+//                                     <th>Mes</th>
+//                                     <th>Secuencia</th>
+//                                     <th>Fecha Protesta</th>
+//                                     <th>Estado</th>
+//                                     <th>Acciones</th>
+//                                 </tr>
+//                             </thead>
+//                             <tbody>
+//                                 {reclamos.map((recibo, index) => (
+//                                     <tr key={index}>
+//                                         <td>{recibo.Legajo}</td>
+//                                         <td>{recibo.Mes}</td>
+//                                         <td>{recibo.Secuencia}</td>
+//                                         <td>{formatFecha(recibo.FechaProtesta)}</td>
+//                                         <td>
+//                                             <Badge bg={recibo.Resuelto === 1 ? "success" : "warning"}>
+//                                                 {recibo.Resuelto === 1 ? "Resuelto" : "Pendiente"}
+//                                             </Badge>
+//                                         </td>
+//                                         <td>
+//                                             <Button variant="primary" size="sm" onClick={() => verReclamoPDF(recibo)} className="me-2">
+//                                                 <FaEye className="me-1" />
+//                                             </Button>
+//                                             {recibo.Resuelto !== 1 && (
+//                                                 <Button variant="success" size="sm" onClick={() => abrirModal(recibo)} disabled={loading}>
+//                                                     <FaCheck className="me-1" />
+//                                                 </Button>
+//                                             )}
+//                                         </td>
+//                                     </tr>
+//                                 ))}
+//                             </tbody>
+//                         </Table>
+//                     )}
+//                 </>
 //             )}
-//             </>
-//         )}
+
+//             {/* Modal para mensaje de resolución */}
+//             <Modal show={showModal} onHide={() => setShowModal(false)}>
+//                 <Modal.Header closeButton>
+//                     <Modal.Title>Resolver Reclamo</Modal.Title>
+//                 </Modal.Header>
+//                 <Modal.Body>
+//                     <Form.Group controlId="obsRes">
+//                         <Form.Label>Mensaje de resolución</Form.Label>
+//                         <Form.Control
+//                             as="textarea"
+//                             rows={3}
+//                             value={obsRes}
+//                             onChange={(e) => setObsRes(e.target.value)}
+//                             placeholder="Ingrese un comentario para el empleado..."
+//                         />
+//                     </Form.Group>
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+//                     <Button variant="primary" onClick={enviarResolucion}>Confirmar</Button>
+//                 </Modal.Footer>
+//             </Modal>
 //         </Container>
 //     );
 // };
 
 // export default AdminReclamos;
+
 import React, { useEffect, useState } from 'react';
 import { generateReclamoPDF } from '../../../components/generateReclamoPDF';
 import { Container, Table, Button, Badge, Alert, Spinner, Modal, Form } from 'react-bootstrap';
@@ -192,6 +264,7 @@ const AdminReclamos = () => {
     const [showModal, setShowModal] = useState(false);
     const [reciboActual, setReciboActual] = useState(null);
     const [obsRes, setObsRes] = useState('');
+    const [filtroEstado, setFiltroEstado] = useState('pendientes');
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -199,6 +272,12 @@ const AdminReclamos = () => {
             setAdminData(JSON.parse(storedUser));
         }
     }, []);
+
+    useEffect(() => {
+        if (adminData) {
+            fetchReclamos();
+        }
+    }, [adminData, filtroEstado]);
 
     const fetchReclamos = async () => {
         try {
@@ -208,14 +287,23 @@ const AdminReclamos = () => {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Token no encontrado. Inicie sesión nuevamente.');
 
-            const params = {
+            let params = {
                 sMes: '99/9999',
                 IdLegajo: 0,
                 nFirmado: 1,
                 nValidado: 0,
-                nProtestado: 1,
-                nResuelto: 0,
+                nProtestado: 0,
+                nResuelto: 0
             };
+
+            if (filtroEstado === 'pendientes') {
+                params.nProtestado = 1;
+            } else if (filtroEstado === 'resueltos') {
+                params.nResuelto = 1;
+            } else if (filtroEstado === 'validados') {
+                params.nValidado = 1;
+                params.nResuelto = 9;
+            }
 
             const response = await axios.get('/api/Consultas/consultarecibos', {
                 params,
@@ -224,42 +312,55 @@ const AdminReclamos = () => {
                 },
             });
 
-            const reclamosFiltrados = response.data.filter((recibo) => recibo.Protesta === 1);
-            setReclamos(reclamosFiltrados);
+            const datos = response.data;
+            setReclamos(datos);
         } catch (err) {
+            console.error(err);
             setError(err.response?.data?.message || err.message || 'Error al obtener los reclamos');
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (adminData) {
-            fetchReclamos();
-        }
-    }, [adminData]);
+    const formatFecha = (fechaStr) => {
+        if (!fechaStr || typeof fechaStr !== 'string') return 'No disponible';
+
+        const [datePart, timePart] = fechaStr.split(' ');
+        if (!datePart || !timePart) return 'No disponible';
+
+        const [day, month, year] = datePart.split('-');
+        const formatted = `${year}-${month}-${day}T${timePart}`;
+        const dateObj = new Date(formatted);
+
+        if (isNaN(dateObj)) return 'No disponible';
+
+        return dateObj.toLocaleString('es-AR', {
+            hour12: false,
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+    };
 
     const verReclamoPDF = async (recibo) => {
         try {
             const token = localStorage.getItem('token');
             const legajo = parseInt(recibo.Legajo);
-            
-            // 1. Obtener datos del empleado
+
             const params = new URLSearchParams({ IdLegajo: legajo });
             const response = await fetch(`/api/Consultas/empleados?${params.toString()}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
             let nombreEmpleado = recibo.Nombre || 'Nombre no disponible';
-
             if (response.ok) {
                 const data = await response.json();
-                nombreEmpleado = data[0].Nombre
-            } else {
-                console.warn('No se pudo obtener información del empleado, código:', response.status);
+                nombreEmpleado = data[0]?.Nombre || nombreEmpleado;
             }
 
-            // 2. Preparar datos para el PDF
             const datosReclamo = {
                 legajo: recibo.Legajo,
                 nombre: nombreEmpleado,
@@ -269,7 +370,7 @@ const AdminReclamos = () => {
                 firmaBase64: recibo.Firma,
                 fechaProtesta: recibo.FechaProtesta,
             };
-            // 3. Generar PDF
+
             const { url } = await generateReclamoPDF(datosReclamo);
             window.open(url, '_blank');
         } catch (error) {
@@ -277,7 +378,6 @@ const AdminReclamos = () => {
             setError(`Error generando PDF: ${error.message}`);
         }
     };
-
 
     const abrirModal = (recibo) => {
         setReciboActual(recibo);
@@ -296,7 +396,6 @@ const AdminReclamos = () => {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Token no encontrado');
 
-            //  Marcar como resuelto
             const datosResuelto = {
                 legajo: reciboActual.Legajo,
                 mes: reciboActual.Mes,
@@ -305,19 +404,17 @@ const AdminReclamos = () => {
                 usrRes: adminData.Nombre,
                 obsRes: obsRes || 'Resuelto sin observaciones',
             };
-            console.log("datos resuelto",datosResuelto)
 
             await axios.post('/api/Procesos/resuelto', datosResuelto, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            // 2. Quitar protesta
             const datosProtesta = {
                 Legajo: reciboActual.Legajo,
                 Mes: reciboActual.Mes,
                 Secuencia: reciboActual.Secuencia,
                 Protesta: 0,
-                ObsProt: "",
+                ObsProt: reciboActual.ObsProt,
             };
 
             await axios.post('/api/Procesos/protesta', datosProtesta, {
@@ -334,17 +431,22 @@ const AdminReclamos = () => {
         }
     };
 
-    const formatFecha = (fecha) => {
-        if (!fecha) return 'No disponible';
-        return new Date(fecha).toLocaleDateString('es-AR');
-    };
-
     return (
         <Container fluid className="admin-reclamos-container">
             <h2 className="mb-4">Gestión de Reclamos</h2>
 
-            {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
-            {successMsg && <Alert variant="success" onClose={() => setSuccessMsg(null)} dismissible>{successMsg}</Alert>}
+            {error && <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert>}
+            {successMsg && <Alert variant="success" dismissible onClose={() => setSuccessMsg(null)}>{successMsg}</Alert>}
+
+            <Form.Select
+                className="mb-3"
+                value={filtroEstado}
+                onChange={(e) => setFiltroEstado(e.target.value)}
+            >
+                <option value="pendientes">Pendientes</option>
+                <option value="resueltos">Resueltos</option>
+                <option value="validados">Validados</option>
+            </Form.Select>
 
             {loading ? (
                 <div className="text-center">
@@ -354,7 +456,7 @@ const AdminReclamos = () => {
             ) : (
                 <>
                     {reclamos.length === 0 ? (
-                        <Alert variant="info">No hay reclamos pendientes para mostrar.</Alert>
+                        <Alert variant="info">No hay reclamos para mostrar.</Alert>
                     ) : (
                         <Table striped bordered hover responsive className="mt-3">
                             <thead>
@@ -362,7 +464,7 @@ const AdminReclamos = () => {
                                     <th>Legajo</th>
                                     <th>Mes</th>
                                     <th>Secuencia</th>
-                                    <th>Fecha Protesta</th>
+                                    <th>Fecha</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -373,18 +475,44 @@ const AdminReclamos = () => {
                                         <td>{recibo.Legajo}</td>
                                         <td>{recibo.Mes}</td>
                                         <td>{recibo.Secuencia}</td>
-                                        <td>{formatFecha(recibo.FechaProtesta)}</td>
                                         <td>
-                                            <Badge bg={recibo.Resuelto === 1 ? "success" : "warning"}>
-                                                {recibo.Resuelto === 1 ? "Resuelto" : "Pendiente"}
+                                            {filtroEstado === 'pendientes' && formatFecha(recibo.FechaProtesta)}
+                                            {filtroEstado === 'resueltos' && formatFecha(recibo.FechaRes)}
+                                            {filtroEstado === 'validados' && formatFecha(recibo.FechaValida)}
+                                        </td>
+                                        <td>
+                                            <Badge bg={
+                                                recibo.Valida === 1
+                                                    ? 'info'
+                                                    : recibo.Resuelto === 1
+                                                    ? 'success'
+                                                    : 'warning'
+                                            }>
+                                                {
+                                                    recibo.Valida === 1
+                                                        ? 'Validado'
+                                                        : recibo.Resuelto === 1
+                                                        ? 'Resuelto'
+                                                        : 'Pendiente'
+                                                }
                                             </Badge>
                                         </td>
                                         <td>
-                                            <Button variant="primary" size="sm" onClick={() => verReclamoPDF(recibo)} className="me-2">
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                onClick={() => verReclamoPDF(recibo)}
+                                                className="me-2"
+                                            >
                                                 <FaEye className="me-1" />
                                             </Button>
                                             {recibo.Resuelto !== 1 && (
-                                                <Button variant="success" size="sm" onClick={() => abrirModal(recibo)} disabled={loading}>
+                                                <Button
+                                                    variant="success"
+                                                    size="sm"
+                                                    onClick={() => abrirModal(recibo)}
+                                                    disabled={loading}
+                                                >
                                                     <FaCheck className="me-1" />
                                                 </Button>
                                             )}
@@ -397,7 +525,6 @@ const AdminReclamos = () => {
                 </>
             )}
 
-            {/* Modal para mensaje de resolución */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Resolver Reclamo</Modal.Title>

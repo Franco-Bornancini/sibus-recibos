@@ -59,7 +59,7 @@ const Init = () => {
       }
 
       const data = await response.json();
-      setRecibos(data); // Esto ahora contiene más datos que pueden usarse en otros componentes
+      setRecibos(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -83,9 +83,6 @@ const Init = () => {
       </div>
     );
   }
-
-  console.log("userdata", userData)
-
 
   return (
     <div className="init-container">

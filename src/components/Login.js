@@ -3,6 +3,7 @@ import '../styles/Login.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo3 from '../assets/SIBUS.png';
+import Logo from '../assets/Logo-Negro.png';
 import { FaBus } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
 
@@ -81,7 +82,7 @@ const Login = () => {
       <div className={`cuadro ${isLoading ? 'loading-active' : ''}`}>
         <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }} className='div_f'>
           <div>
-            <img src={Logo3} alt="Logo Sibus" className='logo_css' />
+            <img src={Logo} alt="Logo Sibus" className='logo_css' />
           </div>
           <div className='encuadro'>
             <h2>Iniciar Sesión</h2>

@@ -30,14 +30,11 @@ const AdminInit = () => {
   return (
     <div className="gerencia-init">
       <Container fluid className="gerencia-content px-3 px-md-4">
-        {/* Header con diseño mejorado */}
         <div className="dash-header">
           <h1 className="welcome-title">
             Bienvenido, <span className="user-name">{nombreUsuario}</span>
           </h1>
         </div>
-
-        {/* Panel de estadísticas */}
         <AdminDashboardCards />
       </Container>
     </div>
